@@ -89,7 +89,7 @@
     .nav-item sup { font-size: 9px; vertical-align: super; opacity: 0.7; }
 
     /* ═══════════════════════════════════════
-       CUSTOM CURSOR CHUYỂN DỰ ÁN
+       CUSTOM CURSOR
     ═══════════════════════════════════════ */
     .custom-cursor {
       position: fixed;
@@ -123,26 +123,14 @@
     }
 
     /* ═══════════════════════════════════════
-       MẶT NẠ SVG CẮT GÓC (TỪ FILE CỦA ANH)
+       MẶT NẠ SVG 536x536 MỚI TỪ ANH THANH LAM
     ═══════════════════════════════════════ */
-    /* 1. Mask Vuông (536x536) -> Cho ảnh cặp 1:1 */
     .cut-corner {
       border-radius: 0 !important; 
-      -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 536 536' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z' fill='black'/%3E%3C/svg%3E");
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 536 536' preserveAspectRatio='none' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C0 4.47716 4.47715 0 10 0H268H397.858C400.51 0 403.054 1.05357 404.929 2.92893L533.071 131.071C534.946 132.946 536 135.49 536 138.142V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z' fill='black'/%3E%3C/svg%3E");
       -webkit-mask-size: 100% 100%;
       -webkit-mask-repeat: no-repeat;
-      mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 536 536' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z' fill='black'/%3E%3C/svg%3E");
-      mask-size: 100% 100%;
-      mask-repeat: no-repeat;
-    }
-
-    /* 2. Mask Chữ Nhật (1685x1077) -> Cho ảnh Hero để chống méo SVG */
-    .cut-corner-hero {
-      border-radius: 0 !important; 
-      -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1685 1077' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1685 277.527C1685 272.227 1682.9 267.144 1679.15 263.394L1421.93 5.86626C1418.18 2.1104 1413.09 0 1407.78 0H1147.14H878.208H20C8.95433 0 -1.19209e-07 8.95431 -1.19209e-07 20V67.3125V134.625V269.25V538.5V1057C-1.19209e-07 1068.05 8.95431 1077 20 1077H1665C1676.05 1077 1685 1068.05 1685 1057V538.5V277.527Z' fill='black'/%3E%3C/svg%3E");
-      -webkit-mask-size: 100% 100%;
-      -webkit-mask-repeat: no-repeat;
-      mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1685 1077' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1685 277.527C1685 272.227 1682.9 267.144 1679.15 263.394L1421.93 5.86626C1418.18 2.1104 1413.09 0 1407.78 0H1147.14H878.208H20C8.95433 0 -1.19209e-07 8.95431 -1.19209e-07 20V67.3125V134.625V269.25V538.5V1057C-1.19209e-07 1068.05 8.95431 1077 20 1077H1665C1676.05 1077 1685 1068.05 1685 1057V538.5V277.527Z' fill='black'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 536 536' preserveAspectRatio='none' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C0 4.47716 4.47715 0 10 0H268H397.858C400.51 0 403.054 1.05357 404.929 2.92893L533.071 131.071C534.946 132.946 536 135.49 536 138.142V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z' fill='black'/%3E%3C/svg%3E");
       mask-size: 100% 100%;
       mask-repeat: no-repeat;
     }
@@ -160,19 +148,18 @@
       gap: var(--gap);
     }
 
-    /* --- Ảnh Hero: Bắt buộc chiếm 12 cột, Chiều cao Auto --- */
+    /* --- Ảnh Hero (Bắt buộc 12 Cột, Auto Height) --- */
     .detail-hero {
       grid-column: 1 / 13;
       position: relative;
       overflow: hidden;
-      /* Đã loại bỏ aspect-ratio để height hoạt động tự do */
       background: #f5f5f5;
       margin-bottom: 80px;
     }
 
     .detail-hero img {
       width: 100%; 
-      height: auto; /* Chiều cao tự động bung theo ảnh */
+      height: auto; 
       display: block;
       transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
     }
@@ -236,7 +223,6 @@
       background: #f5f5f5;
     }
 
-    /* Hình bên trong Gallery tuân thủ aspect-ratio */
     .gal-img img {
       width: 100%;
       height: 100%; 
@@ -249,7 +235,7 @@
       transform: scale(1.04);
     }
 
-    /* ĐỊNH VỊ GRID CHUẨN MỰC: ẢNH ĐỨNG CẶP ĐỀU TỶ LỆ VUÔNG 1:1 */
+    /* ĐỊNH VỊ GRID: ẢNH CẶP LUÔN LÀ VUÔNG 1:1 */
     
     /* Hàng 1: Trái LỚN (6 cột) - Phải NHỎ (5 cột) */
     .item-1 { grid-column: 1 / 7; }
@@ -258,9 +244,10 @@
     .item-2 { grid-column: 8 / 13; }
     .item-2 .gal-img { aspect-ratio: 1 / 1; }
 
-    /* Hàng 2: Panorama Đứng 1 mình -> Toàn cảnh 12 cột */
+    /* Hàng 2: Panorama (Đứng 1 mình 12 cột, Auto Height) */
     .item-3 { grid-column: 1 / 13; }
-    .item-3 .gal-img { aspect-ratio: 21 / 9; } 
+    .item-3 .gal-img { aspect-ratio: auto; } 
+    .item-3 .gal-img img { height: auto; }
 
     /* Hàng 3: Trái NHỎ (5 cột) - Phải LỚN (6 cột) */
     .item-4 { grid-column: 1 / 6; }
@@ -269,7 +256,7 @@
     .item-5 { grid-column: 7 / 13; }
     .item-5 .gal-img { aspect-ratio: 1 / 1; }
 
-    /* Hàng 4: Ảnh cuối cùng Next Project đứng 1 mình (6 cột giữa trang) */
+    /* Hàng 4: Ảnh cuối cùng Next Project đứng 1 mình (6 cột giữa) */
     .item-6 { 
       grid-column: 4 / 10; 
       margin-top: 40px; 
@@ -293,7 +280,7 @@
     }
 
     /* ═══════════════════════════════════════
-       HIỆU ỨNG REVEAL CHUYỂN ĐỘNG TRỤC Y
+       HIỆU ỨNG REVEAL
     ═══════════════════════════════════════ */
     .reveal-elem {
       opacity: 0;
@@ -316,7 +303,7 @@
   Dự án<br>tiếp theo
 </div>
 
-<!-- NAV THÔNG MINH ĐẢO MÀU -->
+<!-- NAV THÔNG MINH -->
 <nav class="nav-blended">
   <a href="index.html" class="nav-intro nav-item">
     <span class="tri-icon">
@@ -348,69 +335,69 @@
 </nav>
 
 <main class="detail-main">
-  <!-- Ảnh Hero: Đứng 1 mình 12 Cột -> Chiều cao TỰ ĐỘNG -> Áp mask 1685x1077 chống méo góc -->
+  <!-- Ảnh Hero: Full 12 Cột, Chiều cao tự động, Áp Mask cắt vát mới -->
   <div class="grid-12">
-    <div id="heroReveal" class="detail-hero cut-corner-hero reveal-elem">
+    <div id="heroReveal" class="detail-hero cut-corner reveal-elem">
       <img src="project01.jpg" alt="Villa Đại Phú Gia" onerror="this.src='hero05.jpg'">
     </div>
   </div>
 
-  <!-- Row Tiêu đề và Mô tả -->
+  <!-- Row Tiêu đề -->
   <div class="detail-text-row grid-12">
     <div class="detail-title reveal-elem">
       <h1>Villa Đại Phú Gia</h1>
     </div>
     <div class="detail-desc reveal-elem">
       <h2>Dự án Thiết Kế Nội Thất Villa Đại Phú Gia Quy Nhơn</h2>
-      <p>Khu đô thị Đại Phú Gia từ lâu đã được ví như "khu nhà giàu", là biểu tượng của sự xa hoa và tráng lệ bậc nhất tại thành phố biển Quy Nhơn.</p>
-      <p>Nơi đây quy tụ những căn biệt thự đẳng cấp, hòa quyện giữa vị thế đắc địa ven đầm Thị Nại và không gian sống thượng lưu.</p>
-      <p>Vừa qua, Kiến Trúc - Nội Thất Tuấn Phát đã vinh dự được chọn làm đơn vị thiết kế và thi công trọn gói nội thất cho một trong những căn villa tuyệt đẹp tại đây.</p>
-      <p>Dự án không chỉ là một công trình nhà ở thông thường, mà là một tác phẩm nghệ thuật kiến trúc, nơi mỗi chi tiết đều được chăm chút tỉ mỉ nhằm tôn vinh phong cách và gu thẩm mỹ đỉnh cao của gia chủ.</p>
-      <p>Tông màu chủ đạo là sự pha trộn tinh tế giữa sắc trắng thanh lịch, xám trung tính và những điểm nhấn màu trầm ấm của gỗ, mang đến cảm giác ấm cúng nhưng không kém phần quyền lực.</p>
+      <p>Khu đô thị Đại Phú Gia từ lâu đã được ví như "khu nhà giàu", là biểu tượng của sự xa hoa bậc nhất tại thành phố biển Quy Nhơn.</p>
+      <p>Tông màu chủ đạo là sự pha trộn tinh tế giữa sắc trắng thanh lịch, xám trung tính và những điểm nhấn trầm ấm của gỗ.</p>
+            <p>Tông màu chủ đạo là sự pha trộn tinh tế giữa sắc trắng thanh lịch, xám trung tính và những điểm nhấn trầm ấm của gỗ.</p>
+                  <p>Tông màu chủ đạo là sự pha trộn tinh tế giữa sắc trắng thanh lịch, xám trung tính và những điểm nhấn trầm ấm của gỗ.</p>
+                        <p>Tông màu chủ đạo là sự pha trộn tinh tế giữa sắc trắng thanh lịch, xám trung tính và những điểm nhấn trầm ấm của gỗ.</p>
     </div>
   </div>
 
   <!-- Thư viện Layout Grid -->
   <div class="detail-gallery grid-12">
     
-    <!-- HÀNG 1: Trái LỚN (6 Cột) - Tỷ lệ Vuông 1:1 -->
+    <!-- HÀNG 1: Trái LỚN (6 Cột) - 1:1 -->
     <div class="gal-item item-1 reveal-elem">
       <div class="gal-img">
         <img src="project02.jpg" alt="" onerror="this.src='hero02.png'">
       </div>
     </div>
     
-    <!-- HÀNG 1: Phải NHỎ (5 Cột) - Tỷ lệ Vuông 1:1 + CẮT GÓC -->
+    <!-- HÀNG 1: Phải NHỎ (5 Cột) - 1:1 + CẮT GÓC -->
     <div class="gal-item item-2 reveal-elem">
       <div class="gal-img cut-corner">
         <img src="project03.jpg" alt="" onerror="this.src='hero03.png'">
       </div>
-      <span class="gal-caption">phong cách thiết kế chuẩn mực Wabi Sabi<br>modern luxury</span>
+      <span class="gal-caption">phong cách thiết kế chuẩn mực Wabi Sabi</span>
     </div>
 
-    <!-- HÀNG 2: Panorama Đứng 1 Mình (12 Cột) + CẮT GÓC -->
+    <!-- HÀNG 2: Panorama Đứng 1 Mình (12 Cột) + Auto Height + CẮT GÓC -->
     <div class="gal-item item-3 reveal-elem">
-      <div class="gal-img cut-corner-hero">
+      <div class="gal-img cut-corner">
         <img src="project04.jpg" alt="" onerror="this.src='hero06.jpg'">
       </div>
     </div>
 
-    <!-- HÀNG 3: Trái NHỎ (5 Cột) - Tỷ lệ Vuông 1:1 -->
+    <!-- HÀNG 3: Trái NHỎ (5 Cột) - 1:1 -->
     <div class="gal-item item-4 reveal-elem">
       <div class="gal-img">
         <img src="project01.jpg" alt="" onerror="this.src='hero07.jpg'">
       </div>
-      <span class="gal-caption">phong cách thiết kế nội thất tĩnh tại với<br>vật liệu tự nhiên</span>
+      <span class="gal-caption">nội thất tĩnh tại với vật liệu tự nhiên</span>
     </div>
 
-    <!-- HÀNG 3: Phải LỚN (6 Cột) - Tỷ lệ Vuông 1:1 + CẮT GÓC -->
+    <!-- HÀNG 3: Phải LỚN (6 Cột) - 1:1 + CẮT GÓC -->
     <div class="gal-item item-5 reveal-elem">
       <div class="gal-img cut-corner">
         <img src="project02.jpg" alt="" onerror="this.src='hero01.png'">
       </div>
     </div>
 
-    <!-- Ảnh Next Project (Đứng Giữa 6 Cột) - Tỷ lệ 16:9 -->
+    <!-- Ảnh Next Project (Giữa 6 Cột) -->
     <div class="gal-item item-6 reveal-elem next-project-trigger" onclick="window.location.href='duan.html'">
       <div class="gal-img">
         <img src="project03.jpg" alt="" onerror="this.src='hero02.png'">
@@ -437,15 +424,11 @@
   requestAnimationFrame(lenisRaf);
 
   /* ═══════════════════════════════════════
-     HIỆU ỨNG REVEAL SCROLL
+     REVEAL SCROLL
   ═══════════════════════════════════════ */
   document.addEventListener("DOMContentLoaded", () => {
-    
-    // Kích hoạt ngay lập tức cho HERO IMAGE
-    setTimeout(() => {
-      const hero = document.getElementById('heroReveal');
-      if(hero) hero.classList.add('is-visible');
-    }, 150);
+    const hero = document.getElementById('heroReveal');
+    if(hero) setTimeout(() => hero.classList.add('is-visible'), 150);
 
     const revealElements = document.querySelectorAll('.reveal-elem');
     const observer = new IntersectionObserver((entries) => {
@@ -461,40 +444,26 @@
   });
 
   /* ═══════════════════════════════════════
-     CUSTOM CURSOR - DỰ ÁN TIẾP THEO
+     CUSTOM CURSOR
   ═══════════════════════════════════════ */
   document.addEventListener("DOMContentLoaded", () => {
     const cursor = document.getElementById('customCursor');
     const nextProjectTrigger = document.querySelector('.next-project-trigger');
-    
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    
-    let cursorX = mouseX;
-    let cursorY = mouseY;
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let cursorX = mouseX, cursorY = mouseY;
 
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
+    window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
 
     function renderCursor() {
       cursorX += (mouseX - cursorX) * 0.15;
       cursorY += (mouseY - cursorY) * 0.15;
-      
       cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
-      
       requestAnimationFrame(renderCursor);
     }
     requestAnimationFrame(renderCursor);
 
-    nextProjectTrigger.addEventListener('mouseenter', () => {
-      cursor.classList.add('active');
-    });
-
-    nextProjectTrigger.addEventListener('mouseleave', () => {
-      cursor.classList.remove('active');
-    });
+    nextProjectTrigger.addEventListener('mouseenter', () => cursor.classList.add('active'));
+    nextProjectTrigger.addEventListener('mouseleave', () => cursor.classList.remove('active'));
   });
 </script>
 
