@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bộ sưu tập Hơi ấm của Gỗ | Tuanphat Furniture</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gap: 20px;
+      --pad-side: 20px;
+      --pad-top: 20px;
+      --col-unit: calc((100% - var(--pad-side) * 2 - var(--gap) * 11) / 12);
+      --hero-clip: 80px;
+      --thumb-clip: 12px;
+    }
+
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Light.otf') format('opentype');
+      font-weight: 300; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Medium.otf') format('opentype');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+
+    html, body {
+      width: 100%;
+      background: transparent; color: #fff;
+      font-family: 'HelveticaNow', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════ */
+    .nav-blended, .nav-normal {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: var(--pad-top) var(--pad-side);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      align-items: start;
+      pointer-events: none;
+    }
+
+    .nav-blended {
+      z-index: 9998;
+      mix-blend-mode: difference;
+      color: #fff;
+    }
+
+    .nav-normal {
+      z-index: 9999;
+    }
+
+    .nav-blended > div, .nav-normal > div {
+      pointer-events: auto;
+    }
+
+    .nav-intro {
+      grid-column: 1 / 2;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 400;
+      letter-spacing: 0.01em; white-space: nowrap;
+    }
+    .nav-intro .tri-icon { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .nav-du-an    { grid-column: 4 / 6;   display: flex; flex-direction: column; gap: 4px; }
+    .nav-thiet-ke { grid-column: 7 / 9;   display: flex; flex-direction: column; gap: 4px; }
+    .nav-lien-he  { grid-column: 10 / 11; }
+    
+    .nav-logo {
+      grid-column: 12 / 13;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .nav-logo svg { display: block; flex-shrink: 0; }
+
+    .nav-item {
+      font-size: 16px; 
+      letter-spacing: 0.01em; cursor: pointer;
+      opacity: 0.9; transition: opacity 0.2s; line-height: 1.6;
+    }
+    .nav-item:hover { opacity: 1; }
+    .nav-item sup { font-size: 9px; vertical-align: super; opacity: 0.7; }
+
+    /* ═══════════════════════════════════════
+       HERO (PARALLAX)
+    ═══════════════════════════════════════ */
+    .hero {
+      position: fixed; 
+      top: 0; left: 0; right: 0;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      z-index: 1;
+      will-change: transform;
+    }
+
+    .slides { position: absolute; inset: 0; }
+
+    .slide { 
+      position: absolute; inset: 0; 
+      pointer-events: none; 
+      z-index: 0; opacity: 0; 
+    }
+    
+    .slide.prev { 
+      z-index: 1; pointer-events: auto; opacity: 1; 
+    }
+    
+    .slide.active { 
+      z-index: 2; pointer-events: auto; opacity: 1; 
+    }
+
+    .slide-inner {
+      position: absolute; inset: 0;
+      clip-path: polygon(0 100%, 0 100%, 0 100%);
+      will-change: clip-path;
+    }
+
+    .slide.active:first-child .slide-inner,
+    .slide--init .slide-inner {
+      clip-path: polygon(0 100%, 250% 100%, 0 -150%);
+      transition: none;
+    }
+
+    .slide.prev .slide-inner {
+      clip-path: polygon(0 100%, 250% 100%, 0 -150%);
+      transition: none;
+    }
+
+    .slide.active .slide-inner {
+      clip-path: polygon(0 100%, 250% 100%, 0 -150%);
+      transition: clip-path 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .slide-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; z-index: 2;
+      will-change: transform;
+    }
+    .scene { position: absolute; inset: 0; z-index: 1; }
+
+    .scene-1::before {
+      content: ''; position: absolute;
+      bottom: 0; right: 25%; width: 50%; height: 65%;
+      clip-path: polygon(30% 0, 100% 30%, 100% 100%, 0 100%, 0 40%);
+      opacity: 0.45;
+    }
+
+    .hero-title {
+      position: absolute;
+      bottom: 0; left: var(--pad-side);
+      z-index: 30; pointer-events: none;
+      padding-bottom: 24px;
+    }
+    .hero-title h1 { font-size: 72px; font-weight: 400; line-height: 1.05; }
+
+    .slide-counter {
+      position: absolute;
+      right: 18px; top: 50%;
+      transform: translateY(-50%);
+      z-index: 30;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px;
+      font-size: 10px; font-weight: 300;
+      letter-spacing: 0.1em;
+    }
+    .counter-num { opacity: 0.8; transition: opacity 0.3s ease; }
+
+    .counter-track {
+      position: relative;
+      width: 1px; height: 60px;
+      background: rgba(255,255,255,0.2);
+      overflow: hidden;
+    }
+    .counter-fill {
+      position: absolute;
+      top: 0; left: 0; width: 1px;
+      background: #fff;
+      height: 25%;
+      transition: height 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .thumbnails {
+      position: absolute;
+      bottom: 24px; right: var(--pad-side);
+      z-index: 30;
+      display: flex; flex-direction: row; gap: 10px;
+      width: calc(var(--col-unit) * 3 + var(--gap) * 2);
+    }
+
+    .thumb-wrapper { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+    .thumb-label {
+      font-size: 9px; font-weight: 300;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.4);
+      transition: color 0.3s;
+    }
+    .thumb-wrapper.active-wrap .thumb-label { color: #fff; }
+
+    .thumb {
+      aspect-ratio: 1 / 1;
+      position: relative; cursor: pointer; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: border-color 0.3s, clip-path 0.35s ease;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .thumb.active {
+      border-color: rgba(255,255,255,0.8);
+      clip-path: polygon(
+        0 0,
+        calc(100% - var(--thumb-clip)) 0,
+        100% var(--thumb-clip),
+        100% 100%,
+        0 100%
+      );
+    }
+
+    .thumb-color {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+    }
+    .thumb-wrapper:nth-child(1) .thumb-color { background: linear-gradient(135deg, #0E7139, #053d1e); }
+    .thumb-wrapper:nth-child(2) .thumb-color { background: linear-gradient(135deg, #54B3B8, #1e6e72); }
+    .thumb-wrapper:nth-child(3) .thumb-color { background: linear-gradient(135deg, #A3CE43, #5a7222); }
+    .thumb-wrapper:nth-child(4) .thumb-color { background: linear-gradient(135deg, #134F63, #0a2f3c); }
+
+    .thumb-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; opacity: 0;
+      transition: opacity 0.3s; z-index: 2;
+    }
+    .thumb-img.loaded { opacity: 1; }
+
+    .thumb-progress {
+      position: absolute; bottom: 0; left: 0;
+      height: 2px; width: 0%;
+      background: #fff; z-index: 4;
+    }
+    .thumb.active .thumb-progress {
+      animation: progress-run 4s linear forwards;
+    }
+    @keyframes progress-run {
+      from { width: 0%; } to { width: 100%; }
+    }
+
+    /* ═══════════════════════════════════════
+       SECTION 2 — VỀ CHÚNG TÔI
+    ═══════════════════════════════════════ */
+    .section-2-outer {
+      margin-top: 100vh;
+      position: relative;
+      z-index: 2; 
+      background: #fff;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px var(--pad-side);
+    }
+
+    .section-2 {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      color: #1a1a1a;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+
+    .s2-bg-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .s2-image-col {
+      grid-column: 1 / 7;
+      position: relative;
+      z-index: 1;
+    }
+
+    .s2-image-wrap {
+      position: absolute;
+      inset: 10px 0 10px 10px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .s2-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .s2-text-col {
+      grid-column: 7 / 13;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 10px 10px 0;
+    }
+
+    .s2-label-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .s2-label {
+      font-size: 48px;
+      align-self: flex-start;
+      color: #E5E5D5
+    }
+
+    .s2-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-bottom: 10px;
+    }
+
+    .s2-body {
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 400;
+      color: #E5E5D5;
+      margin-right:  10px;
+    }
+
+    .s2-link {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: #E5E5D5;
+      text-decoration: none;
+      border-bottom: 1px solid #E5E5D5;
+      padding-bottom: 2px;
+      display: inline-block;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    /* ═══════════════════════════════════════
+       SECTION 3 — DỰ ÁN 
+    ═══════════════════════════════════════ */
+    .section-3 {
+      position: relative;
+      z-index: 2; 
+      width: 100%;
+      background: #fff;
+      color: #000000;
+      padding: 20px var(--pad-side) 100px var(--pad-side); 
+    }
+
+    .s3-header {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      margin-bottom: 48px;
+    }
+
+    .s3-label {
+      grid-column: 1 / 6;
+      font-size: 48px;
+      color: #000000;
+    }
+
+    .s3-desc {
+      grid-column: 7 / 13;
+      font-size: 24px;
+      line-height: 1.6;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+
+    .s3-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      row-gap: 120px; 
+    }
+
+    .s3-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px; 
+      border: 1px solid #0E7139; 
+      transition: border-color 0.4s ease;
+    }
+
+    /* Ảnh tràn 2.2s -> Đợi đúng 2.2s viền mới tan đi */
+    .s3-card.is-revealed {
+      border-color: transparent;
+      transition: border-color 0.4s ease 2.2s; 
+    }
+
+    .s3-card:nth-child(1) { grid-column: 1 / 6; }
+    .s3-card:nth-child(4) { grid-column: 8 / 13; }
+
+    .s3-card:nth-child(2),
+    .s3-card:nth-child(3) { 
+      border: none; 
+      border-radius: 0; 
+      -webkit-clip-path: url(#rounded-cut);
+      clip-path: url(#rounded-cut);
+    }
+    .s3-card:nth-child(2) { grid-column: 7 / 13; }
+    .s3-card:nth-child(3) { grid-column: 1 / 7; }
+
+    .s3-border-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      transition: opacity 0.4s ease;
+    }
+
+    /* Đợi đúng 2.2s viền SVG mới tan đi */
+    .s3-card.is-revealed .s3-border-svg {
+      opacity: 0;
+      transition: opacity 0.4s ease 2.2s; 
+    }
+
+    .s3-img-reveal {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      clip-path: polygon(0 100%, 0 100%, 0 100%);
+      transition: clip-path 2.2s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .s3-card.is-revealed .s3-img-reveal {
+      clip-path: polygon(0 -200%, 300% 100%, 0 100%);
+    }
+
+    .s3-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .s3-card:hover img { transform: scale(1.06); }
+
+    .s3-card-footer {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 16px 16px 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+      z-index: 4;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s, 
+                  transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s;
+    }
+    .s3-card.is-revealed .s3-card-footer {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .s3-card-title {
+      font-size: 18px;
+      font-weight: 400;
+      color: #fff;
+    }
+
+    .s3-card-icon {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(255,255,255,0.6);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .s3-footer {
+      margin-top: 80px; 
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+    .s3-all-link-wrap {
+      grid-column: 7 / 9;
+    }
+
+    .s3-all-link {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: #0E7139;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      padding: 13px 32px 13px 24px;
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .s3-all-link .btn-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .s3-all-link .btn-bg path {
+      transition: fill 0.35s;
+    }
+
+    .s3-all-link:hover {
+      color: #fff;
+    }
+
+    .s3-all-link:hover .btn-bg path {
+      fill: #0E7139;
+    }
+
+    .s3-all-link .btn-label {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════
+       SECTION 4 — BÁO GIÁ
+    ═══════════════════════════════════════ */
+    .section-4 {
+      position: relative;
+      z-index: 2; 
+      width: 100%;
+      height: 100vh;
+      background: #E5E5D5;
+      overflow: hidden;
+    }
+
+    .s4-sticky {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .s4-bg-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      will-change: clip-path;
+      clip-path: inset(50% 50% 50% 50%);
+    }
+
+    .s4-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .s4-container {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    .s4-form-box {
+      position: absolute;
+      top: 20px; 
+      left: var(--pad-side); 
+      width: clamp(340px, 50%, 580px);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      color: #E5E5D5;
+      opacity: 0;
+      transform: translateY(-60px);
+      will-change: transform, opacity;
+    }
+
+    .s4-form-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .s4-text-col, .s4-form-col {
+      position: relative;
+      z-index: 1;
+    }
+
+    .s4-text-col {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .s4-text-col::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      bottom: 24px;
+      right: 0;
+      border-right: 1px dashed rgba(255,255,255,0.4);
+    }
+
+    .s4-title {
+      font-size: 32px;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .s4-subtitle {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    .s4-form-col {
+      width: 120px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    /* ═══════════════════════════════════════
+       SECTION 5 — KIẾN THỨC
+    ═══════════════════════════════════════ */
+    .section-5 {
+      position: relative;
+      z-index: 2; 
+      width: 100%;
+      background: #A3CE43;
+      color: #1a1a1a;
+      padding: 20px var(--pad-side);
+    }
+
+    .s5-header {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .s5-title {
+      grid-column: 1 / 6;
+      font-size: 48px;
+      font-weight: 400;
+    }
+
+    .s5-controls {
+      grid-column: 7 / 13;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .s5-btn-icon, .s5-btn-text {
+      background: transparent;
+      border: 1px solid #1a1a1a; 
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a1a;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .s5-btn-icon:hover, .s5-btn-text:hover {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .s5-btn-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .s5-btn-text {
+      height: 40px;
+      padding: 0 20px;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      font-weight: 400;
+      gap: 8px; 
+    }
+
+    .s5-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+
+    .s5-card {
+      grid-column: span 3;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+    }
+
+    .s5-img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      position: relative;
+      border-radius: 16px; 
+    }
+
+    .s5-card:nth-child(4) .s5-img-wrap {
+      border-radius: 0;
+      -webkit-clip-path: url(#rounded-cut);
+      clip-path: url(#rounded-cut);
+    }
+
+    .s5-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .s5-card:hover .s5-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .s5-card-title {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    .footer {
+      position: relative;
+      z-index: 2; 
+      width: 100%;
+      min-height: 100vh;
+      background: #EAEAE0; 
+      color: #000000;
+      padding: 20px var(--pad-side);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      align-items: center; 
+      flex: 1; 
+    }
+
+    .footer-left {
+      grid-column: 1 / 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      font-size: 15px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .footer-logo-center {
+      grid-column: 5 / 9;
+      display: flex;
+      justify-content: center;
+    }
+
+    .footer-logo-center svg {
+      width: 100%;
+      max-width: 180px; 
+      height: auto;
+    }
+
+    .footer-right {
+      grid-column: 9 / 13;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      font-size: 15px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .footer-big-text {
+      width: 100%;
+      display: block;
+      margin-top: auto; 
+      padding-bottom: 20px;
+    }
+
+    .footer-big-text svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 300;
+      padding-top: 10px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+</head>
+<body>
+
+<!-- SVG CLIP-PATH KHUÔN CẮT VÁT -->
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <defs>
+    <clipPath id="rounded-cut" clipPathUnits="objectBoundingBox">
+      <path d="
+        M 0.04, 0
+        L 0.71, 0
+        Q 0.75, 0 0.778, 0.028
+        L 0.972, 0.222
+        Q 1, 0.25 1, 0.29
+        L 1, 0.96
+        Q 1, 1 0.96, 1
+        L 0.04, 1
+        Q 0, 1 0, 0.96
+        L 0, 0.04
+        Q 0, 0 0.04, 0
+        Z
+      "/>
+    </clipPath>
+  </defs>
+</svg>
+
+<nav class="nav-blended">
+  <div class="nav-intro nav-item" onclick="scrollTo('section2')">
+    <span class="tri-icon">
+      <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M0 0L9 9H0V0Z" fill="#fff"/></svg>
+    </span>
+    Giới thiệu
+  </div>
+  <div class="nav-du-an">
+    <span class="nav-item" onclick="scrollTo('section3')">Dự án<sup>16</sup></span>
+    <span class="nav-item">Sản phẩm</span>
+  </div>
+  <div class="nav-thiet-ke">
+    <span class="nav-item">Thiết kế</span>
+    <span class="nav-item">Thi công</span>
+    <span class="nav-item" onclick="scrollTo('section5')">Kiến thức</span>
+  </div>
+  <div class="nav-lien-he">
+    <span class="nav-item" onclick="scrollTo('footer')">Liên hệ</span>
+  </div>
+</nav>
+
+<nav class="nav-normal">
+  <div class="nav-logo">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <path d="M37.1715 1.17134C36.4214 0.421191 35.4041 0 34.3432 0H4.33301C4.21038 0 4.14854 0.148751 4.23544 0.235655L19.9592 15.9594C19.9853 15.985 20.0205 16 20.0573 16H31.8619C31.9381 16 32 16.0618 32 16.138V27.9426C32 27.9794 32.0143 28.0146 32.0405 28.0402L47.7642 43.7645C47.8511 43.8514 47.9999 43.7896 47.9999 43.6664V13.6567C47.9999 12.5958 47.5787 11.5785 46.8286 10.8284L37.1715 1.17134Z" fill="#fff"/>
+      <path d="M21.1715 17.1713C20.4214 16.4212 19.4041 16 18.3432 16H0.138086C0.0618452 16 0 16.0618 0 16.1381V31.8619C0 31.9381 0.0618452 32 0.138086 32H15.9999V47.8618C15.9999 47.9381 16.0618 47.9999 16.138 47.9999H31.9999V29.6567C31.9999 28.5958 31.5787 27.5785 30.8285 26.8284L21.1715 17.1713Z" fill="#fff"/>
+    </svg>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="slides">
+    <div class="slide active" id="slide-1">
+      <div class="slide-inner">
+        <div class="scene scene-1"></div>
+        <img class="slide-bg" src="hero07.jpg" alt="">
+      </div>
+    </div>
+    <div class="slide" id="slide-2">
+      <div class="slide-inner">
+        <img class="slide-bg" src="hero02.png" alt="">
+      </div>
+    </div>
+    <div class="slide" id="slide-3">
+      <div class="slide-inner">
+        <img class="slide-bg" src="hero03.png" alt="">
+      </div>
+    </div>
+    <div class="slide" id="slide-4">
+      <div class="slide-inner">
+        <img class="slide-bg" src="hero04.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-title">
+    <h1>Bộ sưu tập<br>Hơi ấm của Gỗ</h1>
+  </div>
+
+  <div class="slide-counter">
+    <span class="counter-num" id="counter-current">01</span>
+    <div class="counter-track"><div class="counter-fill" id="counter-fill"></div></div>
+    <span class="counter-num" id="counter-total">04</span>
+  </div>
+
+  <div class="thumbnails">
+    <div class="thumb-wrapper active-wrap">
+      <span class="thumb-label">[ 01 ]</span>
+      <div class="thumb active" data-index="0" onclick="goTo(0)">
+        <div class="thumb-color"></div>
+        <img class="thumb-img" src="hero01.png" alt="" onload="this.classList.add('loaded')">
+        <div class="thumb-progress"></div>
+      </div>
+    </div>
+    <div class="thumb-wrapper">
+      <span class="thumb-label">[ 02 ]</span>
+      <div class="thumb" data-index="1" onclick="goTo(1)">
+        <div class="thumb-color"></div>
+        <img class="thumb-img" src="hero02.png" alt="" onload="this.classList.add('loaded')">
+        <div class="thumb-progress"></div>
+      </div>
+    </div>
+    <div class="thumb-wrapper">
+      <span class="thumb-label">[ 03 ]</span>
+      <div class="thumb" data-index="2" onclick="goTo(2)">
+        <div class="thumb-color"></div>
+        <img class="thumb-img" src="hero03.png" alt="" onload="this.classList.add('loaded')">
+        <div class="thumb-progress"></div>
+      </div>
+    </div>
+    <div class="thumb-wrapper">
+      <span class="thumb-label">[ 04 ]</span>
+      <div class="thumb" data-index="3" onclick="goTo(3)">
+        <div class="thumb-color"></div>
+        <img class="thumb-img" src="hero04.png" alt="" onload="this.classList.add('loaded')">
+        <div class="thumb-progress"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-2-outer" id="section2">
+  <div class="section-2">
+    <svg class="s2-bg-svg"  viewBox="0 0 1648 1077" fill="none" preserveAspectRatio="none">
+      <path d="M1648 167.76C1648 154.47 1642.71 141.727 1633.3 132.345L1515.13 14.5847C1505.76 5.24457 1493.07 0 1479.84 0H1442H1236H824H412H206H20C8.95431 0 0 8.95431 0 20V67.3125V134.625V269.25V538.5V1057C0 1068.05 8.9543 1077 20 1077H1628C1639.05 1077 1648 1068.05 1648 1057V538.5V269.25V167.76Z" fill="#0E7139"/>
+    </svg>
+    
+    <div class="s2-image-col">
+      <div class="s2-image-wrap">
+        <img src="about01.jpg" alt="Về chúng tôi" onerror="this.src='hero06.jpg'">
+      </div>
+    </div>
+
+    <div class="s2-text-col">
+      <div class="s2-label-wrap">
+        <p class="s2-label">Về Chúng Tôi</p>
+      </div>
+      <div class="s2-bottom">
+        <p class="s2-body">Sự tinh tế luôn đến từ những chi tiết nguyên bản nhất. Tuanphat Furniture tin rằng một không gian trọn vẹn không bắt nguồn từ sự cầu kỳ, mà từ cách ta tôn trọng vẻ đẹp của vật liệu thô mộc. Bằng nghệ thuật xử lý ánh sáng và gỗ tự nhiên, chúng tôi tạo ra những "khoảng nghỉ" tĩnh tại cho ngôi nhà của bạn.</p>
+        <a class="s2-link">Khám phá câu chuyện</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-3" id="section3">
+  <div class="s3-header">
+    <div class="s3-label">Dự án Thực tế</div>
+    <div class="s3-desc">Mỗi công trình là một bản giao hưởng giữa ánh sáng, hình khối và chất cảm vật liệu. Chúng tôi kiến tạo không gian sống không chỉ để ngắm nhìn, mà để cảm nhận.</div>
+  </div>
+
+  <div class="s3-grid">
+    
+    <!-- CARD 1 -->
+    <div class="s3-card">
+      <div class="s3-img-reveal">
+        <img src="project01.jpg" alt="" onerror="this.src='hero05.jpg'">
+      </div>
+      <div class="s3-card-footer">
+        <span class="s3-card-title">Biệt thự Đồi Mộc</span>
+        <div class="s3-card-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2V10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CARD 2 -->
+    <div class="s3-card">
+      <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="s3-img-reveal">
+        <img src="project02.jpg" alt="" onerror="this.src='hero02.png'">
+      </div>
+      <div class="s3-card-footer">
+        <span class="s3-card-title">Căn hộ Wabi Sabi</span>
+        <div class="s3-card-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2V10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CARD 3 -->
+    <div class="s3-card">
+      <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="s3-img-reveal">
+        <img src="project03.jpg" alt="" onerror="this.src='hero03.png'">
+      </div>
+      <div class="s3-card-footer">
+        <span class="s3-card-title">Nhà phố Yên Tĩnh</span>
+        <div class="s3-card-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2V10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CARD 4 -->
+    <div class="s3-card">
+      <div class="s3-img-reveal">
+        <img src="project04.jpg" alt="" onerror="this.src='hero06.jpg'">
+      </div>
+      <div class="s3-card-footer">
+        <span class="s3-card-title">Penthouse Gió Thu</span>
+        <div class="s3-card-icon">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2V10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="s3-footer">
+    <div class="s3-all-link-wrap">
+      <a class="s3-all-link">
+        <svg class="btn-bg" viewBox="0 0 160 51" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 0.5H147.567C148.95 0.500073 150.255 1.1351 151.108 2.22266L158.541 11.7002C159.162 12.4924 159.5 13.4699 159.5 14.4766V46C159.5 48.4853 157.485 50.5 155 50.5H5C2.51472 50.5 0.5 48.4853 0.5 46V5C0.5 2.51472 2.51472 0.5 5 0.5Z" fill="transparent" stroke="#0E7139"/>
+        </svg>
+        <span class="btn-label">TẤT CẢ DỰ ÁN</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="section-4" id="section4">
+  <div class="s4-sticky">
+    <div class="s4-bg-wrap" id="s4BgWrap">
+      <img class="s4-bg" src="bg04.jpg" alt="Dự đoán báo giá" onerror="this.src='hero05.jpg'">
+    </div>
+
+    <div class="s4-container">
+      <div class="s4-form-box" id="s4FormBox">
+        <svg class="s4-form-svg" viewBox="0 0 937 298" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 5C0 2.23858 2.23858 0 5 0H468.5H702.75H816.964C818.865 0 820.727 0.541932 822.331 1.56227L932.367 71.5531C935.253 73.3885 937 76.5711 937 79.9908V149V293C937 295.761 934.761 298 932 298H468.5H234.25H117.125H58.5625H5C2.23858 298 0 295.761 0 293V149V5Z" fill="#0E7139"/>
+        </svg>
+        <div class="s4-text-col">
+          <h2 class="s4-title">Dự Đoán Báo Giá</h2>
+          <p class="s4-subtitle">Khởi Tạo Giải Pháp, Nhận Báo Giá<br>Tức Thì</p>
+        </div>
+        <div class="s4-form-col">
+          <span>Form</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-5" id="section5">
+  <div class="s5-header">
+    <div class="s5-title">Kiến thức</div>
+    <div class="s5-controls">
+      <button class="s5-btn-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <button class="s5-btn-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="s5-btn-text">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        TẤT CẢ
+      </button>
+    </div>
+  </div>
+
+  <div class="s5-grid">
+    <div class="s5-card">
+      <div class="s5-img-wrap"><img src="project01.jpg" alt="" onerror="this.src='hero06.jpg'"></div>
+      <h3 class="s5-card-title">Nghệ thuật ánh sáng trong không gian tối giản</h3>
+    </div>
+    <div class="s5-card">
+      <div class="s5-img-wrap"><img src="project02.jpg" alt="" onerror="this.src='hero02.png'"></div>
+      <h3 class="s5-card-title">Gỗ óc chó: Chất liệu của sự nguyên bản</h3>
+    </div>
+    <div class="s5-card">
+      <div class="s5-img-wrap"><img src="project03.jpg" alt="" onerror="this.src='hero03.png'"></div>
+      <h3 class="s5-card-title">Bố trí mảng xanh cho nhà phố chật hẹp</h3>
+    </div>
+    <div class="s5-card">
+      <div class="s5-img-wrap"><img src="project04.jpg" alt="" onerror="this.src='hero04.png'"></div>
+      <h3 class="s5-card-title">Xu hướng vật liệu thô mộc năm 2026</h3>
+    </div>
+  </div>
+</div>
+
+<footer class="footer" id="footer">
+  <div class="footer-top">
+    <div class="footer-left">
+      <p>P. (+84) 935 9949 11</p>
+      <p>E. contact@noithattuanphat.vn</p>
+      <p>W. noithattuanphat.vn</p>
+    </div>
+
+    <div class="footer-logo-center">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M37.1715 1.17134C36.4214 0.421191 35.4041 0 34.3432 0H4.33301C4.21038 0 4.14854 0.148751 4.23544 0.235655L19.9592 15.9594C19.9853 15.985 20.0205 16 20.0573 16H31.8619C31.9381 16 32 16.0618 32 16.138V27.9426C32 27.9794 32.0143 28.0146 32.0405 28.0402L47.7642 43.7645C47.8511 43.8514 47.9999 43.7896 47.9999 43.6664V13.6567C47.9999 12.5958 47.5787 11.5785 46.8286 10.8284L37.1715 1.17134Z" fill="#3B7D4D"/>
+        <path d="M21.1715 17.1713C20.4214 16.4212 19.4041 16 18.3432 16H0.138086C0.0618452 16 0 16.0618 0 16.1381V31.8619C0 31.9381 0.0618452 32 0.138086 32H15.9999V47.8618C15.9999 47.9381 16.0618 47.9999 16.138 47.9999H31.9999V29.6567C31.9999 28.5958 31.5787 27.5785 30.8285 26.8284L21.1715 17.1713Z" fill="#3B7D4D"/>
+      </svg>
+    </div>
+
+    <div class="footer-right">
+      <p>Tuanphat Funiture</p>
+      <p>Chung Cư Lamer 2, 363 Tây Sơn,</p>
+      <p>P. Quy Nhơn Nam, Gia Lai</p>
+    </div>
+  </div>
+
+  <div class="footer-big-text">
+    <svg width="1650" height="210" viewBox="0 0 1650 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M173.497 0.000976562V34.9531H106.677V205.665H66.8199V34.9531H0V0.000976562H173.497Z" fill="#3B7D4D"/>
+      <path d="M236.656 188.482C221.121 174.135 213.355 154.059 213.355 128.252V0.000976562H252.922V128.543C252.922 144.142 257.026 155.983 265.23 164.073C273.435 172.163 285.259 176.205 300.692 176.205C316.129 176.205 327.946 172.163 336.154 164.073C344.363 155.983 348.463 144.142 348.463 128.543V0.000976562H388.025V128.252C388.025 154.443 380.309 174.616 364.876 188.769C349.439 202.925 328.044 210.001 300.692 210.001C273.533 210.001 252.188 202.828 236.656 188.482Z" fill="#3B7D4D"/>
+      <path d="M472.429 127.096H539.835L531.627 104.854C524.792 87.715 516.194 64.2235 505.841 34.3715C497.633 58.2508 489.133 81.7462 480.342 104.854L472.429 127.096ZM568.266 205.665L551.853 160.315H460.412L444.294 205.665H403.559L482.983 0.000976562H529.286L610.173 205.665H568.266Z" fill="#3B7D4D"/>
+      <path d="M783.673 0.000976562H821.776V205.665H777.814L719.785 114.1C703.959 89.6426 691.552 69.0366 682.564 52.282C683.347 73.8535 683.74 107.072 683.74 151.941V205.665H645.638V0.000976562H689.6L747.92 91.5663C765.309 119.297 777.617 139.903 784.85 153.384C784.067 124.692 783.673 91.4731 783.673 53.7285V0.000976562Z" fill="#3B7D4D"/>
+      <path d="M951.605 100.233C963.131 100.233 971.975 97.3926 978.129 91.7107C984.283 86.0326 987.358 77.797 987.358 67.0149C987.358 56.2329 984.283 47.9525 978.129 42.1737C971.975 36.395 963.131 33.5093 951.605 33.5093H901.194V100.233H951.605ZM953.364 0C976.616 0 994.735 6.01737 1007.73 18.0521C1020.72 30.0905 1027.22 46.409 1027.22 67.0149C1027.22 87.427 1020.72 103.652 1007.73 115.687C994.735 127.722 976.616 133.739 953.364 133.739H901.194V205.668H861.632V0H953.364Z" fill="#3B7D4D"/>
+      <path d="M1199.25 0.000976562H1238.82V205.665H1199.25V117.854H1102.25V205.665H1062.68V0.000976562H1102.25V82.6148H1199.25V0.000976562Z" fill="#3B7D4D"/>
+      <path d="M1343.15 127.096H1410.56L1402.35 104.854C1395.52 87.715 1386.92 64.2235 1376.57 34.3715C1368.36 58.2508 1359.86 81.7462 1351.07 104.854L1343.15 127.096ZM1438.99 205.665L1422.58 160.315H1331.14L1315.02 205.665H1274.28L1353.71 0.000976562H1400.01L1480.9 205.665H1438.99Z" fill="#3B7D4D"/>
+      <path d="M1650 0V34.9522H1583.18V205.668H1543.32V34.9522H1476.5V0H1650Z" fill="#3B7D4D"/>
+    </svg>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© Tuanphat 2026</span>
+    <span>All Rights Reserved. Powered by Winhouse</span>
+  </div>
+</footer>
+
+<script>
+  /* ═══════════════════════════════════════
+     LENIS SMOOTH SCROLL & PARALLAX HERO
+  ═══════════════════════════════════════ */
+  const lenis = new Lenis({
+    duration        : 1.1,
+    easing          : t => 1 - Math.pow(1 - t, 4),
+    wheelMultiplier : 1.0,
+    touchMultiplier : 1.5,
+    smoothTouch     : false,
+    infinite        : false,
+  });
+
+  function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
+  requestAnimationFrame(lenisRaf);
+
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) lenis.scrollTo(el, { offset: 0, duration: 1.2, easing: t => 1 - Math.pow(1-t,4) });
+  }
+
+  // Tăng tốc độ Hero parallax lên 0.6 theo yêu cầu
+  const heroEl = document.querySelector('.hero');
+  lenis.on('scroll', (e) => {
+    if (e.scroll <= window.innerHeight) {
+      heroEl.style.transform = `translate3d(0, ${-e.scroll * 0.6}px, 0)`;
+    }
+  });
+
+  /* ═══════════════════════════════════════
+     HERO SLIDESHOW
+  ═══════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const slides    = document.querySelectorAll('.slide');
+    const thumbs    = document.querySelectorAll('.thumb');
+    const wrappers  = document.querySelectorAll('.thumb-wrapper');
+    const counterEl = document.getElementById('counter-current');
+    const fillEl    = document.getElementById('counter-fill');
+    const TOTAL     = slides.length;
+    let current     = 0;
+    let timer;
+    let isAnimating = false;
+
+    const firstInner = document.querySelector('.slide.active .slide-inner');
+    if (firstInner) {
+      firstInner.style.transition = 'none';
+      firstInner.style.clipPath   = 'polygon(0 100%, 250% 100%, 0 -150%)';
+    }
+
+    function updateFill(idx) {
+      fillEl.style.height = ((idx + 1) / TOTAL * 100) + '%';
+    }
+
+    window.goTo = function(idx) {
+      if (idx === current || isAnimating) return;
+      isAnimating = true;
+      const prev = current;
+      current = idx;
+
+      slides.forEach(s => s.classList.remove('prev','active'));
+      slides[prev].classList.add('prev');
+
+      const inner = slides[current].querySelector('.slide-inner');
+      inner.style.transition = 'none';
+      inner.style.clipPath   = 'polygon(0 100%, 0 100%, 0 100%)';
+      void inner.offsetWidth;
+      inner.style.transition = '';
+      inner.style.clipPath   = '';
+      slides[current].classList.add('active');
+
+      wrappers[prev].classList.remove('active-wrap');
+      thumbs[prev].classList.remove('active');
+      wrappers[current].classList.add('active-wrap');
+      thumbs[current].classList.add('active');
+
+      const bar = thumbs[current].querySelector('.thumb-progress');
+      bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
+
+      counterEl.style.opacity = '0';
+      setTimeout(() => {
+        counterEl.textContent = String(current+1).padStart(2,'0');
+        counterEl.style.opacity = '1';
+        updateFill(current);
+      }, 150);
+
+      resetTimer();
+      setTimeout(() => { isAnimating = false; }, 1400);
+    }
+
+    function next() { window.goTo((current+1) % TOTAL); }
+    function resetTimer() { clearInterval(timer); timer = setInterval(next, 4000); }
+    resetTimer();
+  });
+
+  /* ═══════════════════════════════════════
+     INTERSECTION OBSERVER - REVEAL ẢNH DỰ ÁN
+  ═══════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const projectCards = document.querySelectorAll('.s3-card');
+    const projectObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          projectObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    projectCards.forEach(card => projectObserver.observe(card));
+  });
+
+  /* ═══════════════════════════════════════
+     SECTION 4 — STATE MACHINE & PIN (STRICT 100VH)
+  ═══════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const s4El      = document.getElementById('section4');
+    const s4BgWrap  = document.getElementById('s4BgWrap');
+    const s4FormBox = document.getElementById('s4FormBox');
+
+    let s4State = 0; 
+
+    lenis.on('scroll', (e) => {
+      if (!s4El || !s4BgWrap || !s4FormBox) return;
+
+      const scroll = e.scroll;
+      const direction = e.direction; 
+      const vH = window.innerHeight;
+      const sTop = s4El.offsetTop;
+
+      if (s4State === 0) {
+        let p = (scroll - (sTop - vH)) / vH;
+        p = Math.min(1, Math.max(0, p));
+        const ins = (50 * (1 - p)).toFixed(2);
+        s4BgWrap.style.clipPath = `inset(${ins}% ${ins}% ${ins}% ${ins}%)`;
+
+        if (p >= 1 && direction === 1) {
+          s4State = 1;
+          lenis.stop();
+          
+          lenis.scrollTo(sTop, { immediate: true }); 
+
+          s4FormBox.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          void s4FormBox.offsetWidth;
+          
+          s4FormBox.style.opacity = '1';
+          s4FormBox.style.transform = 'translateY(0px)'; 
+
+          setTimeout(() => {
+            s4State = 2;
+            s4FormBox.style.transition = 'none'; 
+            lenis.start();
+          }, 650);
+        }
+      }
+
+      if (s4State === 2) {
+        const delta = scroll - sTop;
+
+        if (delta >= 0) {
+          s4FormBox.style.transform = `translateY(${delta}px)`;
+        }
+
+        if (delta <= 0 && direction === -1) {
+          s4State = 3;
+          lenis.stop();
+          lenis.scrollTo(sTop, { immediate: true });
+
+          s4FormBox.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          void s4FormBox.offsetWidth;
+          
+          s4FormBox.style.opacity = '0';
+          s4FormBox.style.transform = 'translateY(-60px)';
+
+          setTimeout(() => {
+            s4State = 0;
+            lenis.start();
+          }, 650);
+        }
+      }
+      
+      if (scroll > sTop + 50 && s4State === 0) {
+        s4State = 2;
+        s4FormBox.style.transition = 'none';
+        s4FormBox.style.opacity = '1';
+        s4FormBox.style.transform = `translateY(${scroll - sTop}px)`;
+      }
+    });
+  });
+</script>
+</body>
+</html>

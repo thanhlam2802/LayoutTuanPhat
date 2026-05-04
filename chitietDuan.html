@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Villa Đại Phú Gia - Tuanphat Furniture</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gap: 20px;
+      --pad-side: 20px;
+      --pad-top: 20px;
+    }
+
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Light.otf') format('opentype');
+      font-weight: 300; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Medium.otf') format('opentype');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+
+    html, body {
+      width: 100%;
+      background: #ffffff; 
+      color: #000000;
+      font-family: 'HelveticaNow', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════
+       HỆ THỐNG NAV ĐỒNG BỘ
+    ═══════════════════════════════════════ */
+    .nav-blended, .nav-normal {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: var(--pad-top) var(--pad-side);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      align-items: start;
+      pointer-events: none;
+    }
+
+    .nav-blended, .nav-normal {
+      z-index: 9998;
+      mix-blend-mode: difference;
+      color: #fff;
+    }
+    .nav-normal { z-index: 9999; }
+    .nav-blended > div, .nav-normal > div { pointer-events: auto; }
+
+    .nav-intro {
+      grid-column: 1 / 2;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 400;
+      letter-spacing: 0.01em; white-space: nowrap;
+      text-decoration: none; color: inherit;
+    }
+    .nav-intro .tri-icon { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .nav-du-an    { grid-column: 4 / 6;   display: flex; flex-direction: column; gap: 4px; }
+    .nav-thiet-ke { grid-column: 7 / 9;   display: flex; flex-direction: column; gap: 4px; }
+    .nav-lien-he  { grid-column: 10 / 11; }
+    
+    .nav-logo {
+      grid-column: 12 / 13;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .nav-logo svg { display: block; flex-shrink: 0; }
+
+    .nav-item {
+      font-size: 16px; 
+      letter-spacing: 0.01em; cursor: pointer;
+      opacity: 0.9; transition: opacity 0.2s; line-height: 1.6;
+      text-decoration: none; color: inherit;
+    }
+    .nav-item:hover { opacity: 1; }
+    .nav-item sup { font-size: 9px; vertical-align: super; opacity: 0.7; }
+
+    /* ═══════════════════════════════════════
+       CUSTOM CURSOR CHUYỂN DỰ ÁN
+    ═══════════════════════════════════════ */
+    .custom-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: #0E7139; /* Màu xanh nhận diện thương hiệu */
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      line-height: 1.3;
+      pointer-events: none; /* Không cản trở click */
+      z-index: 10000;
+      opacity: 0;
+      transform: scale(0);
+      /* Chỉ transition cho opacity và scale, vị trí sẽ do JS handle mượt mà */
+      transition: opacity 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .custom-cursor.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Khóa chuột mặc định khi hover vào ảnh Next Project */
+    .next-project-trigger {
+      cursor: none !important; 
+    }
+
+    /* ═══════════════════════════════════════
+       BỐ CỤC CHI TIẾT DỰ ÁN
+    ═══════════════════════════════════════ */
+    .detail-main {
+      padding: 120px var(--pad-side) 120px var(--pad-side);
+    }
+
+    .grid-12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+
+    /* --- Ảnh Hero --- */
+    .detail-hero {
+      grid-column: 1 / 13;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9; /* Tỷ lệ ảnh ngang chuẩn */
+      border-radius: 0; 
+      -webkit-clip-path: url(#rounded-cut);
+      clip-path: url(#rounded-cut);
+      margin-bottom: 80px;
+    }
+
+    .detail-hero img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* --- Khu vực Text --- */
+    .detail-text-row {
+      margin-bottom: 120px;
+      align-items: start;
+    }
+
+    .detail-title {
+      grid-column: 1 / 6;
+    }
+    .detail-title h1 {
+      font-size: 48px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .detail-desc {
+      grid-column: 7 / 13;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .detail-desc h2 {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    .detail-desc p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+
+    /* --- Thư viện Ảnh (Layout Đa dạng) --- */
+    .detail-gallery {
+      row-gap: 80px; /* Khoảng cách giữa các hàng ảnh */
+    }
+
+    .gal-item {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .gal-img {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 16px; /* Bo góc mặc định */
+    }
+
+    .gal-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* Thẻ ảnh có góc vát */
+    .gal-img.cut-corner {
+      border-radius: 0;
+      -webkit-clip-path: url(#rounded-cut);
+      clip-path: url(#rounded-cut);
+    }
+
+    /* Định vị từng ảnh trên lưới 12 cột */
+    .item-1 { grid-column: 1 / 7; }
+    .item-1 .gal-img { aspect-ratio: 4 / 5; }
+
+    .item-2 { grid-column: 8 / 13; }
+    .item-2 .gal-img { aspect-ratio: 1 / 1; }
+
+    .item-3 { grid-column: 1 / 13; }
+    .item-3 .gal-img { aspect-ratio: 21 / 9; } /* Ảnh toàn cảnh Panorama */
+
+    .item-4 { grid-column: 1 / 5; }
+    .item-4 .gal-img { aspect-ratio: 1 / 1; }
+
+    .item-5 { grid-column: 6 / 13; }
+    .item-5 .gal-img { aspect-ratio: 4 / 5; }
+
+    /* Ảnh cuối cùng chuyển dự án tiếp theo */
+    .item-6 { 
+      grid-column: 4 / 10; 
+      margin-top: 40px; 
+    }
+    .item-6 .gal-img { aspect-ratio: 16 / 9; }
+
+    /* Caption dưới ảnh */
+    .gal-caption {
+      font-size: 13px;
+      font-weight: 300;
+      opacity: 0.6;
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════════════
+       HIỆU ỨNG REVEAL CHUYỂN ĐỘNG
+    ═══════════════════════════════════════ */
+    .reveal-elem {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.2, 0, 0, 1), 
+                  transform 1s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .reveal-elem.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+</head>
+<body>
+
+<!-- KHUÔN CẮT VÁT (DÙNG CHUNG) -->
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <defs>
+    <clipPath id="rounded-cut" clipPathUnits="objectBoundingBox">
+      <path d="
+        M 0.04, 0
+        L 0.71, 0
+        Q 0.75, 0 0.778, 0.028
+        L 0.972, 0.222
+        Q 1, 0.25 1, 0.29
+        L 1, 0.96
+        Q 1, 1 0.96, 1
+        L 0.04, 1
+        Q 0, 1 0, 0.96
+        L 0, 0.04
+        Q 0, 0 0.04, 0
+        Z
+      "/>
+    </clipPath>
+  </defs>
+</svg>
+
+<!-- CUSTOM CURSOR -->
+<div class="custom-cursor" id="customCursor">
+  Dự án<br>tiếp theo
+</div>
+
+<!-- NAV THÔNG MINH ĐẢO MÀU -->
+<nav class="nav-blended">
+  <a href="index.html" class="nav-intro nav-item">
+    <span class="tri-icon">
+      <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M0 0L9 9H0V0Z" fill="#fff"/></svg>
+    </span>
+    Giới thiệu
+  </a>
+  <div class="nav-du-an">
+    <a href="duan.html" class="nav-item">Dự án <sup>*</sup></a>
+    <span class="nav-item">Sản phẩm</span>
+  </div>
+  <div class="nav-thiet-ke">
+    <span class="nav-item">Thiết kế</span>
+    <span class="nav-item">Thi công</span>
+    <span class="nav-item">Kiến thức</span>
+  </div>
+  <div class="nav-lien-he">
+    <span class="nav-item" onclick="window.location.href='index.html#footer'">Liên hệ</span>
+  </div>
+</nav>
+
+<nav class="nav-normal">
+  <div class="nav-logo">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <path d="M37.1715 1.17134C36.4214 0.421191 35.4041 0 34.3432 0H4.33301C4.21038 0 4.14854 0.148751 4.23544 0.235655L19.9592 15.9594C19.9853 15.985 20.0205 16 20.0573 16H31.8619C31.9381 16 32 16.0618 32 16.138V27.9426C32 27.9794 32.0143 28.0146 32.0405 28.0402L47.7642 43.7645C47.8511 43.8514 47.9999 43.7896 47.9999 43.6664V13.6567C47.9999 12.5958 47.5787 11.5785 46.8286 10.8284L37.1715 1.17134Z" fill="#fff"/>
+      <path d="M21.1715 17.1713C20.4214 16.4212 19.4041 16 18.3432 16H0.138086C0.0618452 16 0 16.0618 0 16.1381V31.8619C0 31.9381 0.0618452 32 0.138086 32H15.9999V47.8618C15.9999 47.9381 16.0618 47.9999 16.138 47.9999H31.9999V29.6567C31.9999 28.5958 31.5787 27.5785 30.8285 26.8284L21.1715 17.1713Z" fill="#fff"/>
+    </svg>
+  </div>
+</nav>
+
+<main class="detail-main">
+  <!-- Ảnh Hero toàn khung có cắt góc -->
+  <div class="grid-12">
+    <div class="detail-hero reveal-elem">
+      <img src="project01.jpg" alt="Villa Đại Phú Gia" onerror="this.src='hero05.jpg'">
+    </div>
+  </div>
+
+  <!-- Row Tiêu đề và Mô tả -->
+  <div class="detail-text-row grid-12">
+    <div class="detail-title reveal-elem">
+      <h1>Villa Đại Phú Gia</h1>
+    </div>
+    <div class="detail-desc reveal-elem">
+      <h2>Dự án Thiết Kế Nội Thất Villa Đại Phú Gia Quy Nhơn</h2>
+      <p>Khu đô thị Đại Phú Gia từ lâu đã được ví như "khu nhà giàu", là biểu tượng của sự xa hoa và tráng lệ bậc nhất tại thành phố biển Quy Nhơn.</p>
+      <p>Nơi đây quy tụ những căn biệt thự đẳng cấp, hòa quyện giữa vị thế đắc địa ven đầm Thị Nại và không gian sống thượng lưu.</p>
+      <p>Vừa qua, Kiến Trúc - Nội Thất Tuấn Phát đã vinh dự được chọn làm đơn vị thiết kế và thi công trọn gói nội thất cho một trong những căn villa tuyệt đẹp tại đây.</p>
+      <p>Dự án không chỉ là một công trình nhà ở thông thường, mà là một tác phẩm nghệ thuật kiến trúc, nơi mỗi chi tiết đều được chăm chút tỉ mỉ nhằm tôn vinh phong cách và gu thẩm mỹ đỉnh cao của gia chủ.</p>
+      <p>Tông màu chủ đạo là sự pha trộn tinh tế giữa sắc trắng thanh lịch, xám trung tính và những điểm nhấn màu trầm ấm của gỗ, mang đến cảm giác ấm cúng nhưng không kém phần quyền lực.</p>
+    </div>
+  </div>
+
+  <!-- Thư viện Layout Grid -->
+  <div class="detail-gallery grid-12">
+    
+    <!-- Ảnh trái to -->
+    <div class="gal-item item-1 reveal-elem">
+      <div class="gal-img"><img src="project02.jpg" alt="" onerror="this.src='hero02.png'"></div>
+    </div>
+    
+    <!-- Ảnh phải nhỏ, cắt góc -->
+    <div class="gal-item item-2 reveal-elem">
+      <div class="gal-img cut-corner"><img src="project03.jpg" alt="" onerror="this.src='hero03.png'"></div>
+      <span class="gal-caption">phong cách thiết kế chuẩn mực Wabi Sabi<br>modern luxury</span>
+    </div>
+
+    <!-- Ảnh siêu dài cắt góc toàn màn -->
+    <div class="gal-item item-3 reveal-elem">
+      <div class="gal-img cut-corner"><img src="project04.jpg" alt="" onerror="this.src='hero06.jpg'"></div>
+    </div>
+
+    <!-- Ảnh trái nhỏ -->
+    <div class="gal-item item-4 reveal-elem">
+      <div class="gal-img"><img src="project01.jpg" alt="" onerror="this.src='hero07.jpg'"></div>
+      <span class="gal-caption">phong cách thiết kế nội thất tĩnh tại với<br>vật liệu tự nhiên</span>
+    </div>
+
+    <!-- Ảnh phải to, cắt góc -->
+    <div class="gal-item item-5 reveal-elem">
+      <div class="gal-img cut-corner"><img src="project02.jpg" alt="" onerror="this.src='hero01.png'"></div>
+    </div>
+
+    <!-- ẢNH NEXT PROJECT CÓ CUSTOM CURSOR -->
+    <div class="gal-item item-6 reveal-elem next-project-trigger" onclick="window.location.href='duan.html'">
+      <div class="gal-img"><img src="project03.jpg" alt="" onerror="this.src='hero02.png'"></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  /* ═══════════════════════════════════════
+     LENIS SMOOTH SCROLL
+  ═══════════════════════════════════════ */
+  const lenis = new Lenis({
+    duration        : 1.1,
+    easing          : t => 1 - Math.pow(1 - t, 4),
+    wheelMultiplier : 1.0,
+    touchMultiplier : 1.5,
+    smoothTouch     : false,
+    infinite        : false,
+  });
+
+  function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
+  requestAnimationFrame(lenisRaf);
+
+  /* ═══════════════════════════════════════
+     HIỆU ỨNG REVEAL CHUYỂN ĐỘNG
+  ═══════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const revealElements = document.querySelectorAll('.reveal-elem');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => observer.observe(el));
+  });
+
+  /* ═══════════════════════════════════════
+     CUSTOM CURSOR - DỰ ÁN TIẾP THEO
+  ═══════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const cursor = document.getElementById('customCursor');
+    const nextProjectTrigger = document.querySelector('.next-project-trigger');
+    
+    // Tọa độ chuột thực tế
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    
+    // Tọa độ của cục Cursor (Dùng nội suy Lerp để tạo độ trễ mượt mà)
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+
+    // Cập nhật tọa độ chuột
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    // Vòng lặp Render mượt mà bằng requestAnimationFrame
+    function renderCursor() {
+      // 0.15 là hệ số độ trễ (càng nhỏ càng trễ, tạo cảm giác mượt)
+      cursorX += (mouseX - cursorX) * 0.15;
+      cursorY += (mouseY - cursorY) * 0.15;
+      
+      // Di chuyển cục cursor theo tọa độ, đồng thời kéo lùi lại 50% để tâm cursor nằm ngay đầu mũi tên
+      cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+      
+      requestAnimationFrame(renderCursor);
+    }
+    requestAnimationFrame(renderCursor);
+
+    // Kích hoạt khi Hover vào khung ảnh cuối
+    nextProjectTrigger.addEventListener('mouseenter', () => {
+      cursor.classList.add('active');
+    });
+
+    nextProjectTrigger.addEventListener('mouseleave', () => {
+      cursor.classList.remove('active');
+    });
+  });
+</script>
+
+</body>
+</html>

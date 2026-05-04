@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dự án - Bộ sưu tập Hơi ấm của Gỗ</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gap: 20px;
+      --pad-side: 20px;
+      --pad-top: 20px;
+    }
+
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Light.otf') format('opentype');
+      font-weight: 300; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'HelveticaNow';
+      src: url('SVN-HelveticaNowDisplay-Medium.otf') format('opentype');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+
+    html, body {
+      width: 100%;
+      background: #ffffff; 
+      color: #000000;
+      font-family: 'HelveticaNow', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════
+       NAV HỆ THỐNG ĐỒNG BỘ 100% TỪ INDEX
+    ═══════════════════════════════════════ */
+    .nav-blended, .nav-normal {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: var(--pad-top) var(--pad-side);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      align-items: start;
+      pointer-events: none;
+    }
+
+    /* Áp dụng blend mode cho cả 2 lớp để text trắng/logo trắng tự đảo thành đen trên nền trắng */
+    .nav-blended, .nav-normal {
+      z-index: 9998;
+      mix-blend-mode: difference;
+      color: #fff;
+    }
+
+    .nav-normal {
+      z-index: 9999;
+    }
+
+    .nav-blended > div, .nav-normal > div {
+      pointer-events: auto;
+    }
+
+    .nav-intro {
+      grid-column: 1 / 2;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 400;
+      letter-spacing: 0.01em; white-space: nowrap;
+    }
+    .nav-intro .tri-icon { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .nav-du-an    { grid-column: 4 / 6;   display: flex; flex-direction: column; gap: 4px; }
+    .nav-thiet-ke { grid-column: 7 / 9;   display: flex; flex-direction: column; gap: 4px; }
+    .nav-lien-he  { grid-column: 10 / 11; }
+    
+    .nav-logo {
+      grid-column: 12 / 13;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .nav-logo svg { display: block; flex-shrink: 0; }
+
+    .nav-item {
+      font-size: 16px; 
+      letter-spacing: 0.01em; cursor: pointer;
+      opacity: 0.9; transition: opacity 0.2s; line-height: 1.6;
+    }
+    .nav-item:hover { opacity: 1; }
+    .nav-item sup { font-size: 9px; vertical-align: super; opacity: 0.7; }
+
+    /* ═══════════════════════════════════════
+       HEADER DỰ ÁN
+    ═══════════════════════════════════════ */
+    .duan-header {
+      /* Giảm padding-top từ 160px xuống 120px */
+      padding: 120px var(--pad-side) 60px var(--pad-side);
+      width: 100%;
+    }
+
+    .duan-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; 
+    }
+
+    .duan-main-title {
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    .duan-count {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .duan-filters {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      /* Giảm margin-top xuống cho gọn */
+      margin-top: 32px;
+    }
+
+    .filter-item {
+      /* Chuyển từ span 2 thành span 1 cột để vạch lọc ngắn lại */
+      grid-column: span 1; 
+      border-top: 1px solid rgba(0,0,0,0.2);
+      padding-top: 12px;
+      font-size: 14px;
+      color: #000;
+      opacity: 0.5;
+      cursor: pointer;
+      font-weight: 400;
+      transition: all 0.3s;
+    }
+
+    .filter-item:hover { opacity: 0.8; }
+    .filter-item.active {
+      opacity: 1;
+      border-top-color: #000;
+    }
+
+    /* ═══════════════════════════════════════
+       GRID DỰ ÁN
+    ═══════════════════════════════════════ */
+    .duan-grid-wrap {
+      padding: 0 var(--pad-side) 100px var(--pad-side);
+    }
+
+    .s3-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      row-gap: 120px; 
+    }
+
+    /* MAP BỐ CỤC CHÍNH XÁC NHƯ BẢN VẼ */
+    .s3-card-wrap:nth-child(1) { grid-column: 1 / 4; }
+    .s3-card-wrap:nth-child(2) { grid-column: 4 / 9; } 
+    .s3-card-wrap:nth-child(3) { grid-column: 9 / 13; }
+    
+    .s3-card-wrap:nth-child(4) { grid-column: 1 / 5; }
+    .s3-card-wrap:nth-child(5) { grid-column: 6 / 9; }
+    .s3-card-wrap:nth-child(6) { grid-column: 9 / 13; } 
+    
+    .s3-card-wrap:nth-child(7) { grid-column: 1 / 4; }
+    .s3-card-wrap:nth-child(8) { grid-column: 5 / 8; }
+    .s3-card-wrap:nth-child(9) { grid-column: 9 / 13; } 
+    
+    .s3-card-wrap:nth-child(10) { grid-column: 1 / 5; } 
+    .s3-card-wrap:nth-child(11) { grid-column: 5 / 9; }
+
+    /* ═══════════════════════════════════════
+       HIỆU ỨNG TRÀN DỰ ÁN & BO GÓC
+    ═══════════════════════════════════════ */
+    .s3-card-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .s3-card-wrap.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .s3-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      border-radius: 16px; 
+      border: 1px solid #0E7139; 
+      transition: border-color 0.4s ease;
+    }
+
+    .s3-card-wrap.is-revealed .s3-card {
+      border-color: transparent;
+      transition: border-color 0.4s ease 2.2s; 
+    }
+
+    /* CARD CẮT VÁT */
+    .s3-card-wrap:nth-child(2) .s3-card,
+    .s3-card-wrap:nth-child(6) .s3-card,
+    .s3-card-wrap:nth-child(9) .s3-card,
+    .s3-card-wrap:nth-child(10) .s3-card { 
+      border: none;
+      border-radius: 0; 
+      -webkit-clip-path: url(#rounded-cut);
+      clip-path: url(#rounded-cut);
+    }
+
+    .s3-border-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      transition: opacity 0.4s ease;
+    }
+
+    .s3-card-wrap.is-revealed .s3-border-svg {
+      opacity: 0;
+      transition: opacity 0.4s ease 2.2s; 
+    }
+
+    .s3-img-reveal {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      clip-path: polygon(0 100%, 0 100%, 0 100%);
+      transition: clip-path 2.2s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .s3-card-wrap.is-revealed .s3-img-reveal {
+      clip-path: polygon(0 -200%, 300% 100%, 0 100%);
+    }
+
+    .s3-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .s3-card:hover img { transform: scale(1.06); }
+
+    .s3-card-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #000;
+      font-weight: 400;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s, 
+                  transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s;
+    }
+
+    .s3-card-wrap.is-revealed .s3-card-info {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .s3-card-title { font-size: 15px; }
+    .s3-card-year { font-size: 15px; opacity: 0.6; }
+
+    /* ═══════════════════════════════════════
+       FOOTER NÚT "XEM THÊM" SVG
+    ═══════════════════════════════════════ */
+    .s3-footer {
+      margin-top: 80px; 
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .s3-all-link {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: #0E7139;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      padding: 13px 40px; /* Tăng chiều rộng nút */
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+
+    .s3-all-link .btn-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .s3-all-link .btn-bg path {
+      transition: fill 0.35s;
+    }
+
+    .s3-all-link:hover {
+      color: #fff;
+    }
+
+    .s3-all-link:hover .btn-bg path {
+      fill: #0E7139;
+    }
+
+    .s3-all-link .btn-label {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+</head>
+<body>
+
+<!-- SVG CLIP-PATH KHUÔN CẮT VÁT (DÙNG CHUNG) -->
+<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+  <defs>
+    <clipPath id="rounded-cut" clipPathUnits="objectBoundingBox">
+      <path d="
+        M 0.04, 0
+        L 0.71, 0
+        Q 0.75, 0 0.778, 0.028
+        L 0.972, 0.222
+        Q 1, 0.25 1, 0.29
+        L 1, 0.96
+        Q 1, 1 0.96, 1
+        L 0.04, 1
+        Q 0, 1 0, 0.96
+        L 0, 0.04
+        Q 0, 0 0.04, 0
+        Z
+      "/>
+    </clipPath>
+  </defs>
+</svg>
+
+<!-- NAV TỪ YÊU CẦU CỦA ANH -->
+<nav class="nav-blended">
+  <div class="nav-intro nav-item" onclick="window.location.href='index.html#section2'">
+    <span class="tri-icon">
+      <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M0 0L9 9H0V0Z" fill="#fff"/></svg>
+    </span>
+    Giới thiệu
+  </div>
+  <div class="nav-du-an">
+    <span class="nav-item">Dự án<sup>16</sup></span>
+    <span class="nav-item">Sản phẩm</span>
+  </div>
+  <div class="nav-thiet-ke">
+    <span class="nav-item">Thiết kế</span>
+    <span class="nav-item">Thi công</span>
+    <span class="nav-item">Kiến thức</span>
+  </div>
+  <div class="nav-lien-he">
+    <span class="nav-item" onclick="window.location.href='index.html#footer'">Liên hệ</span>
+  </div>
+</nav>
+
+<nav class="nav-normal">
+  <div class="nav-logo">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <path d="M37.1715 1.17134C36.4214 0.421191 35.4041 0 34.3432 0H4.33301C4.21038 0 4.14854 0.148751 4.23544 0.235655L19.9592 15.9594C19.9853 15.985 20.0205 16 20.0573 16H31.8619C31.9381 16 32 16.0618 32 16.138V27.9426C32 27.9794 32.0143 28.0146 32.0405 28.0402L47.7642 43.7645C47.8511 43.8514 47.9999 43.7896 47.9999 43.6664V13.6567C47.9999 12.5958 47.5787 11.5785 46.8286 10.8284L37.1715 1.17134Z" fill="#fff"/>
+      <path d="M21.1715 17.1713C20.4214 16.4212 19.4041 16 18.3432 16H0.138086C0.0618452 16 0 16.0618 0 16.1381V31.8619C0 31.9381 0.0618452 32 0.138086 32H15.9999V47.8618C15.9999 47.9381 16.0618 47.9999 16.138 47.9999H31.9999V29.6567C31.9999 28.5958 31.5787 27.5785 30.8285 26.8284L21.1715 17.1713Z" fill="#fff"/>
+    </svg>
+  </div>
+</nav>
+
+<div class="duan-header">
+  <div class="duan-title-row">
+    <h1 class="duan-main-title">Dự án</h1>
+    <span class="duan-count">34</span>
+  </div>
+  <div class="duan-filters">
+    <div class="filter-item active">Tất cả</div>
+    <div class="filter-item">Nhà ở</div>
+    <div class="filter-item">Văn phòng</div>
+    <div class="filter-item">Shop</div>
+    <div class="filter-item">Doanh nghiệp</div>
+  </div>
+</div>
+
+<div class="duan-grid-wrap">
+  <div class="s3-grid">
+    
+    <!-- CARD 1 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project01.jpg" alt="" onerror="this.src='hero05.jpg'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Biệt thự Đồi Mộc</span>
+        <span class="s3-card-year">2024</span>
+      </div>
+    </div>
+    
+    <!-- CARD 2 (Cắt vát) -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="s3-img-reveal"><img src="project02.jpg" alt="" onerror="this.src='hero02.png'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Căn hộ Wabi Sabi</span>
+        <span class="s3-card-year">2024</span>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project03.jpg" alt="" onerror="this.src='hero03.png'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">The Minimal Loft</span>
+        <span class="s3-card-year">2024</span>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project04.jpg" alt="" onerror="this.src='hero06.jpg'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Nhà phố Yên Tĩnh</span>
+        <span class="s3-card-year">2024</span>
+      </div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project01.jpg" alt="" onerror="this.src='hero07.jpg'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Artisan Studio</span>
+        <span class="s3-card-year">2023</span>
+      </div>
+    </div>
+
+    <!-- CARD 6 (Cắt vát) -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="s3-img-reveal"><img src="project02.jpg" alt="" onerror="this.src='hero01.png'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Zen Office Space</span>
+        <span class="s3-card-year">2023</span>
+      </div>
+    </div>
+
+    <!-- CARD 7 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project03.jpg" alt="" onerror="this.src='hero02.png'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Cloud Boutique</span>
+        <span class="s3-card-year">2023</span>
+      </div>
+    </div>
+
+    <!-- CARD 8 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project04.jpg" alt="" onerror="this.src='hero03.png'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Timber & Light</span>
+        <span class="s3-card-year">2023</span>
+      </div>
+    </div>
+
+    <!-- CARD 9 (Cắt vát) -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="s3-img-reveal"><img src="project01.jpg" alt="" onerror="this.src='hero04.png'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">The Clay Retreat</span>
+        <span class="s3-card-year">2022</span>
+      </div>
+    </div>
+
+    <!-- CARD 10 (Cắt vát) -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="s3-img-reveal"><img src="project02.jpg" alt="" onerror="this.src='hero05.jpg'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">Penthouse Gió Thu</span>
+        <span class="s3-card-year">2022</span>
+      </div>
+    </div>
+
+    <!-- CARD 11 -->
+    <div class="s3-card-wrap">
+      <div class="s3-card">
+        <div class="s3-img-reveal"><img src="project03.jpg" alt="" onerror="this.src='hero06.jpg'"></div>
+      </div>
+      <div class="s3-card-info">
+        <span class="s3-card-title">The Concrete Villa</span>
+        <span class="s3-card-year">2022</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NÚT XEM THÊM THEO HỆ THỐNG INDEX -->
+  <div class="s3-footer">
+    <div class="s3-all-link-wrap">
+      <a class="s3-all-link">
+        <svg class="btn-bg" viewBox="0 0 160 51" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 0.5H147.567C148.95 0.500073 150.255 1.1351 151.108 2.22266L158.541 11.7002C159.162 12.4924 159.5 13.4699 159.5 14.4766V46C159.5 48.4853 157.485 50.5 155 50.5H5C2.51472 50.5 0.5 48.4853 0.5 46V5C0.5 2.51472 2.51472 0.5 5 0.5Z" fill="transparent" stroke="#0E7139"/>
+        </svg>
+        <span class="btn-label">XEM THÊM</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ═══════════════════════════════════════
+     LENIS SMOOTH SCROLL 
+  ═══════════════════════════════════════ */
+  const lenis = new Lenis({
+    duration        : 1.1,
+    easing          : t => 1 - Math.pow(1 - t, 4),
+    wheelMultiplier : 1.0,
+    touchMultiplier : 1.5,
+    smoothTouch     : false,
+    infinite        : false,
+  });
+
+  function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
+  requestAnimationFrame(lenisRaf);
+
+  /* ═══════════════════════════════════════
+     INTERSECTION OBSERVER - REVEAL CARD
+  ═══════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll('.s3-card-wrap');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => observer.observe(card));
+  });
+</script>
+
+</body>
+</html>
