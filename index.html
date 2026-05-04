@@ -360,7 +360,7 @@
     }
 
     /* ═══════════════════════════════════════
-       SECTION 3 — DỰ ÁN 
+       SECTION 3 — DỰ ÁN LỚN (833x833 MASK)
     ═══════════════════════════════════════ */
     .section-3 {
       position: relative;
@@ -409,7 +409,7 @@
       transition: border-color 0.4s ease;
     }
 
-    /* Ảnh tràn 2.2s -> Đợi đúng 2.2s viền mới tan đi */
+   
     .s3-card.is-revealed {
       border-color: transparent;
       transition: border-color 0.4s ease 2.2s; 
@@ -418,13 +418,17 @@
     .s3-card:nth-child(1) { grid-column: 1 / 6; }
     .s3-card:nth-child(4) { grid-column: 8 / 13; }
 
+ 
     .s3-card:nth-child(2),
     .s3-card:nth-child(3) { 
       border: none; 
       border-radius: 0; 
-      -webkit-clip-path: url(#rounded-cut);
-      clip-path: url(#rounded-cut);
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 833 833' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0.5H616.466C621.637 0.5 626.597 2.55427 630.254 6.21094L826.789 202.746C830.446 206.403 832.5 211.363 832.5 216.534V813C832.5 823.77 823.77 832.5 813 832.5H20C9.23045 832.5 0.5 823.77 0.5 813V20C0.5 9.23045 9.23045 0.5 20 0.5Z' fill='black'/%3E%3C/svg%3E");
+      -webkit-mask-size: 100% 100%;
+      mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 833 833' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0.5H616.466C621.637 0.5 626.597 2.55427 630.254 6.21094L826.789 202.746C830.446 206.403 832.5 211.363 832.5 216.534V813C832.5 823.77 823.77 832.5 813 832.5H20C9.23045 832.5 0.5 823.77 0.5 813V20C0.5 9.23045 9.23045 0.5 20 0.5Z' fill='black'/%3E%3C/svg%3E");
+      mask-size: 100% 100%;
     }
+    
     .s3-card:nth-child(2) { grid-column: 7 / 13; }
     .s3-card:nth-child(3) { grid-column: 1 / 7; }
 
@@ -660,7 +664,7 @@
     }
 
     /* ═══════════════════════════════════════
-       SECTION 5 — KIẾN THỨC
+       SECTION 5 — KIẾN THỨC BỊ CẮT GÓC (417x417 MASK)
     ═══════════════════════════════════════ */
     .section-5 {
       position: relative;
@@ -741,13 +745,18 @@
       aspect-ratio: 1 / 1;
       overflow: hidden;
       position: relative;
-      border-radius: 16px; 
+      border-radius: 8px; 
     }
 
+    /* MASK SVG 417x417 (Dành cho thẻ Kiến thức số 4) */
     .s5-card:nth-child(4) .s5-img-wrap {
       border-radius: 0;
-      -webkit-clip-path: url(#rounded-cut);
-      clip-path: url(#rounded-cut);
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 417 417' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0.5H308.607C311.127 0.5 313.544 1.50078 315.325 3.28223L413.718 101.675C415.499 103.456 416.5 105.873 416.5 108.393V407C416.5 412.247 412.247 416.5 407 416.5H10C4.75329 416.5 0.5 412.247 0.5 407V10C0.5 4.7533 4.75329 0.5 10 0.5Z' fill='black'/%3E%3C/svg%3E");
+      -webkit-mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 417 417' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0.5H308.607C311.127 0.5 313.544 1.50078 315.325 3.28223L413.718 101.675C415.499 103.456 416.5 105.873 416.5 108.393V407C416.5 412.247 412.247 416.5 407 416.5H10C4.75329 416.5 0.5 412.247 0.5 407V10C0.5 4.7533 4.75329 0.5 10 0.5Z' fill='black'/%3E%3C/svg%3E");
+      mask-size: 100% 100%;
+      mask-repeat: no-repeat;
     }
 
     .s5-img-wrap img {
@@ -856,28 +865,6 @@
 </head>
 <body>
 
-<!-- SVG CLIP-PATH KHUÔN CẮT VÁT -->
-<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-  <defs>
-    <clipPath id="rounded-cut" clipPathUnits="objectBoundingBox">
-      <path d="
-        M 0.04, 0
-        L 0.71, 0
-        Q 0.75, 0 0.778, 0.028
-        L 0.972, 0.222
-        Q 1, 0.25 1, 0.29
-        L 1, 0.96
-        Q 1, 1 0.96, 1
-        L 0.04, 1
-        Q 0, 1 0, 0.96
-        L 0, 0.04
-        Q 0, 0 0.04, 0
-        Z
-      "/>
-    </clipPath>
-  </defs>
-</svg>
-
 <nav class="nav-blended">
   <div class="nav-intro nav-item" onclick="scrollTo('section2')">
     <span class="tri-icon">
@@ -981,8 +968,9 @@
 
 <div class="section-2-outer" id="section2">
   <div class="section-2">
-    <svg class="s2-bg-svg"  viewBox="0 0 1648 1077" fill="none" preserveAspectRatio="none">
-      <path d="M1648 167.76C1648 154.47 1642.71 141.727 1633.3 132.345L1515.13 14.5847C1505.76 5.24457 1493.07 0 1479.84 0H1442H1236H824H412H206H20C8.95431 0 0 8.95431 0 20V67.3125V134.625V269.25V538.5V1057C0 1068.05 8.9543 1077 20 1077H1628C1639.05 1077 1648 1068.05 1648 1057V538.5V269.25V167.76Z" fill="#0E7139"/>
+    <!-- NỀN SECTION GIỚI THIỆU: SVG 1685x1077 Co giãn chiếm chọn không gian -->
+    <svg class="s2-bg-svg" viewBox="0 0 1685 1077" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1685 277.527C1685 272.227 1682.9 267.144 1679.15 263.394L1421.93 5.86626C1418.18 2.1104 1413.09 0 1407.78 0H1147.14H878.208H20C8.95433 0 -1.19209e-07 8.95431 -1.19209e-07 20V67.3125V134.625V269.25V538.5V1057C-1.19209e-07 1068.05 8.95431 1077 20 1077H1665C1676.05 1077 1685 1068.05 1685 1057V538.5V277.527Z" fill="#0E7139"/>
     </svg>
     
     <div class="s2-image-col">
@@ -1024,10 +1012,11 @@
       </div>
     </div>
     
-    <!-- CARD 2 -->
+    <!-- CARD 2: DỰ ÁN LỚN SVG 833x833 -->
     <div class="s3-card" onclick="window.location.href='chitietDuan.html'">
-      <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      <!-- Viền CSS nhúng từ đường dẫn của anh -->
+      <svg class="s3-border-svg" viewBox="0 0 833 833" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 0.5H616.466C621.637 0.5 626.597 2.55427 630.254 6.21094L826.789 202.746C830.446 206.403 832.5 211.363 832.5 216.534V813C832.5 823.77 823.77 832.5 813 832.5H20C9.23045 832.5 0.5 823.77 0.5 813V20C0.5 9.23045 9.23045 0.5 20 0.5Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
       </svg>
       <div class="s3-img-reveal">
         <img src="project02.jpg" alt="" onerror="this.src='hero02.png'">
@@ -1040,10 +1029,11 @@
       </div>
     </div>
     
-    <!-- CARD 3 -->
+    <!-- CARD 3: DỰ ÁN LỚN SVG 833x833 -->
     <div class="s3-card" onclick="window.location.href='chitietDuan.html'">
-      <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      <!-- Viền CSS nhúng từ đường dẫn của anh -->
+      <svg class="s3-border-svg" viewBox="0 0 833 833" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 0.5H616.466C621.637 0.5 626.597 2.55427 630.254 6.21094L826.789 202.746C830.446 206.403 832.5 211.363 832.5 216.534V813C832.5 823.77 823.77 832.5 813 832.5H20C9.23045 832.5 0.5 823.77 0.5 813V20C0.5 9.23045 9.23045 0.5 20 0.5Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
       </svg>
       <div class="s3-img-reveal">
         <img src="project03.jpg" alt="" onerror="this.src='hero03.png'">
@@ -1137,7 +1127,7 @@
       <h3 class="s5-card-title">Bố trí mảng xanh cho nhà phố chật hẹp</h3>
     </div>
     <div class="s5-card">
-      <div class="s5-img-wrap"><img src="project04.jpg" alt="" onerror="this.src='hero04.png'"></div>
+      <div class="s5-img-wrap mask-knowledge"><img src="project04.jpg" alt="" onerror="this.src='hero04.png'"></div>
       <h3 class="s5-card-title">Xu hướng vật liệu thô mộc năm 2026</h3>
     </div>
   </div>

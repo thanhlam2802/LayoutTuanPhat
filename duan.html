@@ -11,6 +11,8 @@
       --gap: 20px;
       --pad-side: 20px;
       --pad-top: 20px;
+     
+      --border-rad: 10px; 
     }
 
     @font-face {
@@ -32,7 +34,7 @@
     html, body {
       width: 100%;
       background: #ffffff; 
-      color: #000000;
+      color: #0E7139;
       font-family: 'HelveticaNow', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       overflow-x: hidden;
     }
@@ -51,7 +53,6 @@
       pointer-events: none;
     }
 
-    /* Áp dụng blend mode cho cả 2 lớp để text trắng/logo trắng tự đảo thành đen trên nền trắng */
     .nav-blended, .nav-normal {
       z-index: 9998;
       mix-blend-mode: difference;
@@ -71,6 +72,7 @@
       display: flex; align-items: center; gap: 6px;
       font-size: 14px; font-weight: 400;
       letter-spacing: 0.01em; white-space: nowrap;
+      text-decoration: none; color: inherit;
     }
     .nav-intro .tri-icon { display: inline-flex; align-items: center; flex-shrink: 0; }
     .nav-du-an    { grid-column: 4 / 6;   display: flex; flex-direction: column; gap: 4px; }
@@ -88,6 +90,7 @@
       font-size: 16px; 
       letter-spacing: 0.01em; cursor: pointer;
       opacity: 0.9; transition: opacity 0.2s; line-height: 1.6;
+      text-decoration: none; color: inherit;
     }
     .nav-item:hover { opacity: 1; }
     .nav-item sup { font-size: 9px; vertical-align: super; opacity: 0.7; }
@@ -96,7 +99,6 @@
        HEADER DỰ ÁN
     ═══════════════════════════════════════ */
     .duan-header {
-      /* Giảm padding-top từ 160px xuống 120px */
       padding: 120px var(--pad-side) 60px var(--pad-side);
       width: 100%;
     }
@@ -115,7 +117,7 @@
     }
 
     .duan-count {
-      font-size: 16px;
+      font-size: 24px;
       font-weight: 400;
     }
 
@@ -123,17 +125,15 @@
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: var(--gap);
-      /* Giảm margin-top xuống cho gọn */
       margin-top: 32px;
     }
 
     .filter-item {
-      /* Chuyển từ span 2 thành span 1 cột để vạch lọc ngắn lại */
       grid-column: span 1; 
-      border-top: 1px solid rgba(0,0,0,0.2);
+      border-top: 1px solid #A3CE43;
       padding-top: 12px;
       font-size: 14px;
-      color: #000;
+      color: #000000;
       opacity: 0.5;
       cursor: pointer;
       font-weight: 400;
@@ -143,12 +143,10 @@
     .filter-item:hover { opacity: 0.8; }
     .filter-item.active {
       opacity: 1;
-      border-top-color: #000;
+      border-top-color: #0E7139;
     }
 
-    /* ═══════════════════════════════════════
-       GRID DỰ ÁN
-    ═══════════════════════════════════════ */
+ 
     .duan-grid-wrap {
       padding: 0 var(--pad-side) 100px var(--pad-side);
     }
@@ -200,9 +198,11 @@
       cursor: pointer;
       aspect-ratio: 1 / 1;
       width: 100%;
-      border-radius: 16px; 
+   
+      border-radius: var(--border-rad); 
       border: 1px solid #0E7139; 
       transition: border-color 0.4s ease;
+      background: #f5f5f5;
     }
 
     .s3-card-wrap.is-revealed .s3-card {
@@ -210,16 +210,24 @@
       transition: border-color 0.4s ease 2.2s; 
     }
 
-    /* CARD CẮT VÁT */
+    /* ═══════════════════════════════════════
+       CẬP NHẬT MASK SVG CHO CARD VUÔNG DỰ ÁN
+    ═══════════════════════════════════════ */
     .s3-card-wrap:nth-child(2) .s3-card,
     .s3-card-wrap:nth-child(6) .s3-card,
     .s3-card-wrap:nth-child(9) .s3-card,
     .s3-card-wrap:nth-child(10) .s3-card { 
       border: none;
       border-radius: 0; 
-      -webkit-clip-path: url(#rounded-cut);
-      clip-path: url(#rounded-cut);
+      
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 536 536' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z' fill='black'/%3E%3C/svg%3E");
+      -webkit-mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 536 536' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z' fill='black'/%3E%3C/svg%3E");
+      mask-size: 100% 100%;
+      mask-repeat: no-repeat;
     }
+
 
     .s3-border-svg {
       position: absolute;
@@ -258,7 +266,9 @@
       transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .s3-card:hover img { transform: scale(1.06); }
+    .s3-card-wrap:hover img { 
+      transform: scale(1.06); 
+    }
 
     .s3-card-info {
       display: flex;
@@ -303,7 +313,7 @@
       justify-content: center;
       gap: 8px;
       position: relative;
-      padding: 13px 40px; /* Tăng chiều rộng nút */
+      padding: 13px 40px; 
       transition: color 0.3s;
       white-space: nowrap;
     }
@@ -336,38 +346,15 @@
 </head>
 <body>
 
-<!-- SVG CLIP-PATH KHUÔN CẮT VÁT (DÙNG CHUNG) -->
-<svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
-  <defs>
-    <clipPath id="rounded-cut" clipPathUnits="objectBoundingBox">
-      <path d="
-        M 0.04, 0
-        L 0.71, 0
-        Q 0.75, 0 0.778, 0.028
-        L 0.972, 0.222
-        Q 1, 0.25 1, 0.29
-        L 1, 0.96
-        Q 1, 1 0.96, 1
-        L 0.04, 1
-        Q 0, 1 0, 0.96
-        L 0, 0.04
-        Q 0, 0 0.04, 0
-        Z
-      "/>
-    </clipPath>
-  </defs>
-</svg>
-
-<!-- NAV TỪ YÊU CẦU CỦA ANH -->
 <nav class="nav-blended">
-  <div class="nav-intro nav-item" onclick="window.location.href='index.html#section2'">
+  <a href="index.html" class="nav-intro nav-item">
     <span class="tri-icon">
       <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M0 0L9 9H0V0Z" fill="#fff"/></svg>
     </span>
     Giới thiệu
-  </div>
+  </a>
   <div class="nav-du-an">
-    <span class="nav-item">Dự án<sup>16</sup></span>
+    <a href="duan.html" class="nav-item">Dự án <sup>16</sup></a>
     <span class="nav-item">Sản phẩm</span>
   </div>
   <div class="nav-thiet-ke">
@@ -417,11 +404,12 @@
       </div>
     </div>
     
-    <!-- CARD 2 (Cắt vát) -->
+    <!-- CARD 2 (Cắt vát - Dùng Mask 536x536) -->
     <div class="s3-card-wrap" onclick="window.location.href='chitietDuan.html'">
       <div class="s3-card">
-        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+     
+        <svg class="s3-border-svg" viewBox="0 0 536 536" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
         </svg>
         <div class="s3-img-reveal"><img src="project02.jpg" alt="" onerror="this.src='hero02.png'"></div>
       </div>
@@ -464,11 +452,12 @@
       </div>
     </div>
 
-    <!-- CARD 6 (Cắt vát) -->
+    <!-- CARD 6 (Cắt vát - Dùng Mask 536x536) -->
     <div class="s3-card-wrap" onclick="window.location.href='chitietDuan.html'">
       <div class="s3-card">
-        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+   
+        <svg class="s3-border-svg" viewBox="0 0 536 536" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
         </svg>
         <div class="s3-img-reveal"><img src="project02.jpg" alt="" onerror="this.src='hero01.png'"></div>
       </div>
@@ -500,11 +489,12 @@
       </div>
     </div>
 
-    <!-- CARD 9 (Cắt vát) -->
+    <!-- CARD 9 (Cắt vát - Dùng Mask 536x536) -->
     <div class="s3-card-wrap" onclick="window.location.href='chitietDuan.html'">
       <div class="s3-card">
-        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    
+        <svg class="s3-border-svg" viewBox="0 0 536 536" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
         </svg>
         <div class="s3-img-reveal"><img src="project01.jpg" alt="" onerror="this.src='hero04.png'"></div>
       </div>
@@ -514,11 +504,12 @@
       </div>
     </div>
 
-    <!-- CARD 10 (Cắt vát) -->
+    <!-- CARD 10 (Cắt vát - Dùng Mask 536x536) -->
     <div class="s3-card-wrap" onclick="window.location.href='chitietDuan.html'">
       <div class="s3-card">
-        <svg class="s3-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M 4,0 L 71,0 Q 75,0 77.8,2.8 L 97.2,22.2 Q 100,25 100,29 L 100,96 Q 100,100 96,100 L 4,100 Q 0,100 0,96 L 0,4 Q 0,0 4,0 Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
+        
+        <svg class="s3-border-svg" viewBox="0 0 536 536" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 10C0 4.47716 4.47715 0 10 0H268H402H464.858C467.51 0 470.054 1.05357 471.929 2.92893L533.071 64.0711C534.946 65.9464 536 68.49 536 71.1421V134V268V526C536 531.523 531.523 536 526 536H10C4.47716 536 0 531.523 0 526V10Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
         </svg>
         <div class="s3-img-reveal"><img src="project02.jpg" alt="" onerror="this.src='hero05.jpg'"></div>
       </div>
@@ -541,7 +532,7 @@
 
   </div>
 
-  <!-- NÚT XEM THÊM THEO HỆ THỐNG INDEX -->
+
   <div class="s3-footer">
     <div class="s3-all-link-wrap">
       <a class="s3-all-link">
@@ -555,9 +546,7 @@
 </div>
 
 <script>
-  /* ═══════════════════════════════════════
-     LENIS SMOOTH SCROLL 
-  ═══════════════════════════════════════ */
+
   const lenis = new Lenis({
     duration        : 1.1,
     easing          : t => 1 - Math.pow(1 - t, 4),
@@ -570,9 +559,7 @@
   function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
   requestAnimationFrame(lenisRaf);
 
-  /* ═══════════════════════════════════════
-     INTERSECTION OBSERVER - REVEAL CARD
-  ═══════════════════════════════════════ */
+
   document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll('.s3-card-wrap');
     const observer = new IntersectionObserver((entries) => {
