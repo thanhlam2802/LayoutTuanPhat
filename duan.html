@@ -185,6 +185,7 @@
       transform: translateY(60px);
       transition: opacity 0.8s ease, transform 0.8s ease;
       cursor: pointer;
+      will-change: opacity, transform; /* Ép phần cứng xử lý khung bao */
     }
     
     .s3-card-wrap.is-revealed {
@@ -198,11 +199,15 @@
       cursor: pointer;
       aspect-ratio: 1 / 1;
       width: 100%;
-   
       border-radius: var(--border-rad); 
       border: 1px solid #0E7139; 
       transition: border-color 0.4s ease;
       background: #f5f5f5;
+      
+      /* QUAN TRỌNG: Ép layer đồ họa độc lập, chống lag khi có mask */
+      transform: translate3d(0, 0, 0); 
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .s3-card-wrap.is-revealed .s3-card {
@@ -252,6 +257,7 @@
       z-index: 1;
       clip-path: polygon(0 100%, 0 100%, 0 100%);
       transition: clip-path 2.2s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: clip-path; /* Tối ưu hiệu suất cắt ảnh */
     }
 
     .s3-card-wrap.is-revealed .s3-img-reveal {
@@ -264,10 +270,12 @@
       object-fit: cover;
       display: block;
       transition: transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+      transform: translate3d(0, 0, 0); /* Tối ưu chuyển động scale ảnh */
+      will-change: transform;
     }
 
     .s3-card-wrap:hover img { 
-      transform: scale(1.06); 
+      transform: scale(1.06) translate3d(0, 0, 0); 
     }
 
     .s3-card-info {
@@ -546,10 +554,11 @@
 </div>
 
 <script>
-
+  /* ═══════════════════════════════════════
+     Tối ưu Lenis Scroll sử dụng lerp
+  ═══════════════════════════════════════ */
   const lenis = new Lenis({
-    duration        : 1.1,
-    easing          : t => 1 - Math.pow(1 - t, 4),
+    lerp            : 0.08, /* Đổi từ duration sang lerp để mượt hơn, giống file index */
     wheelMultiplier : 1.0,
     touchMultiplier : 1.5,
     smoothTouch     : false,
@@ -559,7 +568,9 @@
   function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
   requestAnimationFrame(lenisRaf);
 
-
+  /* ═══════════════════════════════════════
+     Intersection Observer
+  ═══════════════════════════════════════ */
   document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll('.s3-card-wrap');
     const observer = new IntersectionObserver((entries) => {

@@ -409,7 +409,6 @@
       transition: border-color 0.4s ease;
     }
 
-   
     .s3-card.is-revealed {
       border-color: transparent;
       transition: border-color 0.4s ease 2.2s; 
@@ -418,7 +417,6 @@
     .s3-card:nth-child(1) { grid-column: 1 / 6; }
     .s3-card:nth-child(4) { grid-column: 8 / 13; }
 
- 
     .s3-card:nth-child(2),
     .s3-card:nth-child(3) { 
       border: none; 
@@ -554,7 +552,7 @@
     }
 
     /* ═══════════════════════════════════════
-       SECTION 4 — BÁO GIÁ
+       SECTION 4 — BÁO GIÁ (Giữ nguyên gốc)
     ═══════════════════════════════════════ */
     .section-4 {
       position: relative;
@@ -664,7 +662,7 @@
     }
 
     /* ═══════════════════════════════════════
-       SECTION 5 — KIẾN THỨC BỊ CẮT GÓC (417x417 MASK)
+       SECTION 5 — KIẾN THỨC BỊ CẮT GÓC
     ═══════════════════════════════════════ */
     .section-5 {
       position: relative;
@@ -1014,7 +1012,6 @@
     
     <!-- CARD 2: DỰ ÁN LỚN SVG 833x833 -->
     <div class="s3-card" onclick="window.location.href='chitietDuan.html'">
-      <!-- Viền CSS nhúng từ đường dẫn của anh -->
       <svg class="s3-border-svg" viewBox="0 0 833 833" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M20 0.5H616.466C621.637 0.5 626.597 2.55427 630.254 6.21094L826.789 202.746C830.446 206.403 832.5 211.363 832.5 216.534V813C832.5 823.77 823.77 832.5 813 832.5H20C9.23045 832.5 0.5 823.77 0.5 813V20C0.5 9.23045 9.23045 0.5 20 0.5Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
       </svg>
@@ -1031,7 +1028,6 @@
     
     <!-- CARD 3: DỰ ÁN LỚN SVG 833x833 -->
     <div class="s3-card" onclick="window.location.href='chitietDuan.html'">
-      <!-- Viền CSS nhúng từ đường dẫn của anh -->
       <svg class="s3-border-svg" viewBox="0 0 833 833" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M20 0.5H616.466C621.637 0.5 626.597 2.55427 630.254 6.21094L826.789 202.746C830.446 206.403 832.5 211.363 832.5 216.534V813C832.5 823.77 823.77 832.5 813 832.5H20C9.23045 832.5 0.5 823.77 0.5 813V20C0.5 9.23045 9.23045 0.5 20 0.5Z" fill="none" stroke="#0E7139" stroke-width="2" vector-effect="non-scaling-stroke"/>
       </svg>
@@ -1176,15 +1172,14 @@
 
 <script>
   /* ═══════════════════════════════════════
-     LENIS SMOOTH SCROLL & PARALLAX HERO
+     LENIS SMOOTH SCROLL (Dùng lerp thay duration để cuộn mượt hơn)
   ═══════════════════════════════════════ */
   const lenis = new Lenis({
-    duration        : 1.1,
-    easing          : t => 1 - Math.pow(1 - t, 4),
-    wheelMultiplier : 1.0,
-    touchMultiplier : 1.5,
-    smoothTouch     : false,
-    infinite        : false,
+    lerp: 0.08, /* Cảm giác native mượt hơn thay vì giật cục theo duration */
+    wheelMultiplier: 1.0,
+    touchMultiplier: 1.5,
+    smoothTouch: false,
+    infinite: false,
   });
 
   function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
@@ -1195,11 +1190,11 @@
     if (el) lenis.scrollTo(el, { offset: 0, duration: 1.2, easing: t => 1 - Math.pow(1-t,4) });
   }
 
-  // Tăng tốc độ Hero parallax lên 0.6 theo yêu cầu
+  // Tăng tốc độ Hero parallax lên 0.6
   const heroEl = document.querySelector('.hero');
   lenis.on('scroll', (e) => {
     if (e.scroll <= window.innerHeight) {
-      heroEl.style.transform = `translate3d(0, ${-e.scroll * 0.6}px, 0)`;
+      heroEl.style.transform = `translate3d(0, ${-e.scroll * 0.8}px, 0)`;
     }
   });
 
@@ -1286,7 +1281,7 @@
   });
 
   /* ═══════════════════════════════════════
-     SECTION 4 — STATE MACHINE & PIN (STRICT 100VH)
+     SECTION 4 — STATE MACHINE & PIN (TỐI ƯU HÓA GPU & LOGIC)
   ═══════════════════════════════════════ */
   document.addEventListener("DOMContentLoaded", () => {
     const s4El      = document.getElementById('section4');
@@ -1306,8 +1301,12 @@
       if (s4State === 0) {
         let p = (scroll - (sTop - vH)) / vH;
         p = Math.min(1, Math.max(0, p));
-        const ins = (50 * (1 - p)).toFixed(2);
-        s4BgWrap.style.clipPath = `inset(${ins}% ${ins}% ${ins}% ${ins}%)`;
+        
+        // GIẢM TẢI: Chỉ tính toán clip-path khi đoạn này đang nằm trong màn hình
+        if (p >= 0 && p <= 1) {
+            const ins = (50 * (1 - p)).toFixed(2);
+            s4BgWrap.style.clipPath = `inset(${ins}% ${ins}% ${ins}% ${ins}%)`;
+        }
 
         if (p >= 1 && direction === 1) {
           s4State = 1;
@@ -1316,10 +1315,11 @@
           lenis.scrollTo(sTop, { immediate: true }); 
 
           s4FormBox.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-          void s4FormBox.offsetWidth;
+          void s4FormBox.offsetWidth; // Force reflow
           
           s4FormBox.style.opacity = '1';
-          s4FormBox.style.transform = 'translateY(0px)'; 
+          // TỐI ƯU 1: Dùng translate3d thay cho translateY để đẩy việc xử lý xuống GPU
+          s4FormBox.style.transform = 'translate3d(0, 0px, 0)'; 
 
           setTimeout(() => {
             s4State = 2;
@@ -1333,7 +1333,8 @@
         const delta = scroll - sTop;
 
         if (delta >= 0) {
-          s4FormBox.style.transform = `translateY(${delta}px)`;
+          // TỐI ƯU 2: Math.round() để fix hoàn toàn lỗi nhòe/rung do pixel số lẻ
+          s4FormBox.style.transform = `translate3d(0, ${Math.round(delta)}px, 0)`;
         }
 
         if (delta <= 0 && direction === -1) {
@@ -1345,7 +1346,7 @@
           void s4FormBox.offsetWidth;
           
           s4FormBox.style.opacity = '0';
-          s4FormBox.style.transform = 'translateY(-60px)';
+          s4FormBox.style.transform = 'translate3d(0, -60px, 0)';
 
           setTimeout(() => {
             s4State = 0;
@@ -1354,11 +1355,13 @@
         }
       }
       
+      // TỐI ƯU 3: Cập nhật fallback an toàn. Nếu user cuộn chuột quá nhanh vượt qua ngưỡng sTop
       if (scroll > sTop + 50 && s4State === 0) {
         s4State = 2;
         s4FormBox.style.transition = 'none';
         s4FormBox.style.opacity = '1';
-        s4FormBox.style.transform = `translateY(${scroll - sTop}px)`;
+        s4BgWrap.style.clipPath = `inset(0% 0% 0% 0%)`; // Đảm bảo bg mở full
+        s4FormBox.style.transform = `translate3d(0, ${Math.round(scroll - sTop)}px, 0)`;
       }
     });
   });
